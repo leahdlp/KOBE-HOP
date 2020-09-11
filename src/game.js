@@ -1,7 +1,7 @@
 import Player from "./player";
 import Level from "./level";
 
-export default class KobeHop {
+export default class DoodleJump {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.dimensions = { width: canvas.width, height: canvas.height };
@@ -26,12 +26,13 @@ export default class KobeHop {
 
   registerEvents() {
     this.boundKeyStrokeHandler = this.keyStroke.bind(this);
-    this.ctx.canvas.addEventListener("keydown", this.boundKeyStrokeHandler);
+    document.addEventListener("keydown", this.boundKeyStrokeHandler);
   }
 
   keyStroke(e) {
+    // console.log('key')
     let keyCode = e.keyCode;
-
+    // console.log(keyCode);
     if (!this.running) this.play();
 
     switch (keyCode) {
@@ -53,8 +54,14 @@ export default class KobeHop {
     );
   }
 
+  //this is the key method of gaming action
+  //animate tells the game to advance one bit
+  //the bird moves, the level moves
+  //everything is redrawn to the screen
   animate() {
+    //first we move and draw the level
     this.level.animate(this.ctx);
+    //then we move and draw the bird
     this.player.animate(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
@@ -89,3 +96,4 @@ export default class KobeHop {
     this.ctx.strokeText(this.score, loc.x, loc.y);
   }
 }
+// 

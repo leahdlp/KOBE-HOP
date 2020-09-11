@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KobeHop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DoodleJump; });
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./level */ "./src/level.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -107,9 +107,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-var KobeHop = /*#__PURE__*/function () {
-  function KobeHop(canvas) {
-    _classCallCheck(this, KobeHop);
+var DoodleJump = /*#__PURE__*/function () {
+  function DoodleJump(canvas) {
+    _classCallCheck(this, DoodleJump);
 
     this.ctx = canvas.getContext("2d");
     this.dimensions = {
@@ -120,7 +120,7 @@ var KobeHop = /*#__PURE__*/function () {
     this.restart();
   }
 
-  _createClass(KobeHop, [{
+  _createClass(DoodleJump, [{
     key: "play",
     value: function play() {
       this.running = true;
@@ -140,12 +140,14 @@ var KobeHop = /*#__PURE__*/function () {
     key: "registerEvents",
     value: function registerEvents() {
       this.boundKeyStrokeHandler = this.keyStroke.bind(this);
-      this.ctx.canvas.addEventListener("keydown", this.boundKeyStrokeHandler);
+      document.addEventListener("keydown", this.boundKeyStrokeHandler);
     }
   }, {
     key: "keyStroke",
     value: function keyStroke(e) {
-      var keyCode = e.keyCode;
+      // console.log('key')
+      var keyCode = e.keyCode; // console.log(keyCode);
+
       if (!this.running) this.play();
 
       switch (keyCode) {
@@ -158,20 +160,27 @@ var KobeHop = /*#__PURE__*/function () {
 
         default:
           break;
-      } // this.player.jump();
+      }
 
+      this.player.jump();
     }
   }, {
     key: "gameOver",
     value: function gameOver() {
       return this.level.collidesWith(this.player.bounds()) || this.player.outOfBounds();
-    }
+    } //this is the key method of gaming action
+    //animate tells the game to advance one bit
+    //the bird moves, the level moves
+    //everything is redrawn to the screen
+
   }, {
     key: "animate",
     value: function animate() {
       var _this = this;
 
-      this.level.animate(this.ctx);
+      //first we move and draw the level
+      this.level.animate(this.ctx); //then we move and draw the bird
+
       this.player.animate(this.ctx); //then we check to see if the game is over and let the player know
 
       if (this.gameOver()) {
@@ -209,8 +218,9 @@ var KobeHop = /*#__PURE__*/function () {
     }
   }]);
 
-  return KobeHop;
-}();
+  return DoodleJump;
+}(); // 
+
 
 
 
@@ -233,13 +243,14 @@ __webpack_require__.r(__webpack_exports__);
 // import MovingObject from "./moving_object"
 
 document.addEventListener("DOMContentLoaded", function () {
-  var canvasEle = document.getElementById("game-canvas"); // canvasEl.width = Game.DIM_X;
+  var game_canv = document.getElementById("game-canvas");
+  var bg_canv = document.getElementById("bg-canvas"); // canvasEl.width = Game.DIM_X;
   // canvasEl.height = Game.DIM_Y;
   // const ctx = canvasEle.getContext("2d");
 
-  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](canvasEle); // new GameView(game, ctx).start();
+  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](game_canv, bg_canv); // new GameView(game, ctx).start();
+  // console.log(canvasEle)
 
-  console.log(canvasEle);
   console.log('webapck is working'); // window.MovingObject = MovingObject;
 }); // class DoodleJump {
 //   constructor(canvas) {
@@ -590,13 +601,11 @@ var Level = /*#__PURE__*/function () {
     key: "drawBackground",
     value: function drawBackground(ctx) {
       var background = new Image();
-      background.src = "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
+      background.src = "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg"; // background.onload = function() {
 
-      background.onload = function () {
-        ctx.drawImage(background, -100, -110);
-      }; // ctx.fillStyle = "skyblue";
+      ctx.drawImage(background, -100, -110); // }
+      // ctx.fillStyle = "skyblue";
       // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
-
     }
   }, {
     key: "landedPlatform",
@@ -694,7 +703,7 @@ var CONSTANTS = {
   JUMP_SPEED: 8,
   TERMINAL_VEL: 12,
   PLAYER_WIDTH: 40,
-  PLAYER_HEIGHT: 30
+  PLAYER_HEIGHT: 40
 };
 
 var Player = /*#__PURE__*/function () {
@@ -704,7 +713,7 @@ var Player = /*#__PURE__*/function () {
     this.dimensions = dimensions;
     this.x = this.dimensions.width / 3; // this.y = this.dimensions.height / 2;
 
-    this.y = 0;
+    this.y = 760;
     this.vel = 0;
   }
 

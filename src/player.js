@@ -3,7 +3,7 @@ const CONSTANTS = {
   JUMP_SPEED: 8,
   TERMINAL_VEL: 12,
   PLAYER_WIDTH: 40,
-  PLAYER_HEIGHT: 30,
+  PLAYER_HEIGHT: 40,
 };
 
 class Player {
@@ -11,7 +11,7 @@ class Player {
     this.dimensions = dimensions;
     this.x = this.dimensions.width / 3;
     // this.y = this.dimensions.height / 2;
-    this.y = 0;
+    this.y = 760;
     this.vel = 0;
   }
 
@@ -20,6 +20,7 @@ class Player {
     //instead of just assigning it outright
     //to make the experience more fun and 'bouncy' we just set it directly
     this.vel = -1 * CONSTANTS.JUMP_SPEED;
+    this.y += this.vel;
   }
 
   movePlayer(dir="") {
@@ -30,7 +31,6 @@ class Player {
     }
     //for each frame, the Player should move by it's current velocity
     //velocity is 'pixels per frame', so each frame it should update position by vel
-    this.y += this.vel;
     //the acceleration of gravity is in pixels per second per second
     //so each second, it changes the velocity by whatever the gravity constant is
     this.vel += CONSTANTS.GRAVITY;
@@ -64,6 +64,7 @@ class Player {
       bottom: this.y + CONSTANTS.PLAYER_HEIGHT,
     };
   }
+
 
   outOfBounds() {
     // const aboveTheTop = this.y < 0;

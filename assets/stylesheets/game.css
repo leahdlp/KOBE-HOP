@@ -1,11 +1,16 @@
 #game-title {
     font-size: 48px;
     color: purple;
+    font-family: 'Rubik', sans-serif;
 }
 
-canvas {
+#game-canvas {
     display: block;
-    border: black 1px solid;
+    border: RED 1px solid;
+}
+
+#bg-canvas {
+    border: red 10px solid;
 }
 
 .game-container {
@@ -15,4 +20,20 @@ canvas {
 
 #game-title {
     text-align: center;
+    font-weight: 900;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+body {
+    /* background-color: blue; */
+    background-image: 
+    url(
+        "https://www.nba.com/images/cms/2017-06/kobe-2000-Finals.jpg?cw=1920&w=1921&x=0&ch=1080&h=2928&y=288"
+    );
+    background-repeat: no-repeat;
+    /* background-position-x: left;
+    background-position-y: bottom; */
+    /* background-position: left; */
+    /* background-position: top; */
 }

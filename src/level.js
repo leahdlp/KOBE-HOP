@@ -59,9 +59,9 @@ export default class Level {
       let background = new Image();
       background.src =
           "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
-      background.onload = function() {
+      // background.onload = function() {
           ctx.drawImage(background, -100, -110)
-      }
+      // }
     // ctx.fillStyle = "skyblue";
     // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
   }
