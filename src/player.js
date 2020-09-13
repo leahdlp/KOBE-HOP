@@ -21,6 +21,7 @@ class Player {
     //to make the experience more fun and 'bouncy' we just set it directly
     this.vel = -1 * CONSTANTS.JUMP_SPEED;
     this.y += this.vel;
+    this.movePlayer()
   }
 
   movePlayer(dir="") {

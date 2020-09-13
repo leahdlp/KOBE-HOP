@@ -118,18 +118,20 @@ var DoodleJump = /*#__PURE__*/function () {
     };
     this.registerEvents();
     this.restart();
+    console.log('tf');
   }
 
   _createClass(DoodleJump, [{
     key: "play",
     value: function play() {
+      console.log('play');
       this.running = true;
       this.animate();
-      this.player.jump();
     }
   }, {
     key: "restart",
     value: function restart() {
+      console.log('res');
       this.running = false;
       this.score = 0;
       this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this.dimensions);
@@ -139,6 +141,7 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "registerEvents",
     value: function registerEvents() {
+      console.log('reg');
       this.boundKeyStrokeHandler = this.keyStroke.bind(this);
       document.addEventListener("keydown", this.boundKeyStrokeHandler);
     }
@@ -146,23 +149,25 @@ var DoodleJump = /*#__PURE__*/function () {
     key: "keyStroke",
     value: function keyStroke(e) {
       // console.log('key')
-      var keyCode = e.keyCode; // console.log(keyCode);
-
+      var keyCode = e.keyCode;
+      console.log(keyCode);
       if (!this.running) this.play();
 
       switch (keyCode) {
         case 37:
+          console.log('l');
           this.player.movePlayer("left");
           break;
 
         case 39:
+          console.log('r');
           this.player.movePlayer("right");
 
         default:
+          // console.log('eslse')
           break;
-      }
+      } // this.player.jump();
 
-      this.player.jump();
     }
   }, {
     key: "gameOver",
@@ -572,13 +577,15 @@ var Level = /*#__PURE__*/function () {
     var firstPlatformLocation = [this.dimensions.height / 5, this.dimensions.width / 3]; //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
 
     this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform(firstPlatformLocation[0] + CONSTANTS.PLATFORM_SPACING, firstPlatformLocation[1] + CONSTANTS.PLATFORM_SPACING), this.randomPlatform(firstPlatformLocation[0] + CONSTANTS.PLATFORM_SPACING * 2, firstPlatformLocation[1] + CONSTANTS.PLATFORM_SPACING * 2)];
+    console.log('con');
   }
 
   _createClass(Level, [{
     key: "randomPlatform",
     value: function randomPlatform(location) {
-      var heightRange = this.dimensions.height - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
-      var spaceRange = this.dimensions.width - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
+      console.log('plat');
+      var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
+      var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
 
       var platform = {
@@ -637,8 +644,11 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
+      console.log('draw');
       this.eachPlatform(function (platform) {
-        ctx.fillStyle = "green"; //draw platform
+        console.log(platform);
+        ctx.fillStyle = "#6a0dad";
+        console.log(ctx); //draw platform
 
         ctx.fillRect(platform.left, platform.top, CONSTANTS.Platform_WIDTH, platform.top - platform.bottom);
       });
@@ -724,6 +734,8 @@ var Player = /*#__PURE__*/function () {
       //instead of just assigning it outright
       //to make the experience more fun and 'bouncy' we just set it directly
       this.vel = -1 * CONSTANTS.JUMP_SPEED;
+      this.y += this.vel;
+      this.movePlayer();
     }
   }, {
     key: "movePlayer",
@@ -736,10 +748,9 @@ var Player = /*#__PURE__*/function () {
         this.x -= 10;
       } //for each frame, the Player should move by it's current velocity
       //velocity is 'pixels per frame', so each frame it should update position by vel
-
-
-      this.y += this.vel; //the acceleration of gravity is in pixels per second per second
+      //the acceleration of gravity is in pixels per second per second
       //so each second, it changes the velocity by whatever the gravity constant is
+
 
       this.vel += CONSTANTS.GRAVITY; //we set a 'terminal velocity', a maximum speed the Player can travel
       //this keeps the game from becoming too wild because the Player is moving too fast to control

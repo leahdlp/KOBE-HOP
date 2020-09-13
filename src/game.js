@@ -7,15 +7,17 @@ export default class DoodleJump {
     this.dimensions = { width: canvas.width, height: canvas.height };
     this.registerEvents();
     this.restart();
+    console.log('tf')
   }
 
   play() {
+    console.log('play')
     this.running = true;
     this.animate();
-    this.player.jump();
   }
 
   restart() {
+    console.log('res')
     this.running = false;
     this.score = 0;
     this.player = new Player(this.dimensions);
@@ -25,6 +27,7 @@ export default class DoodleJump {
   }
 
   registerEvents() {
+    console.log('reg')
     this.boundKeyStrokeHandler = this.keyStroke.bind(this);
     document.addEventListener("keydown", this.boundKeyStrokeHandler);
   }
@@ -32,16 +35,19 @@ export default class DoodleJump {
   keyStroke(e) {
     // console.log('key')
     let keyCode = e.keyCode;
-    // console.log(keyCode);
+    console.log(keyCode);
     if (!this.running) this.play();
 
     switch (keyCode) {
       case 37:
+        console.log('l')
         this.player.movePlayer("left");
         break;
       case 39:
+        console.log('r')
         this.player.movePlayer("right")
       default:
+        // console.log('eslse')
         break;
     }
     // this.player.jump();

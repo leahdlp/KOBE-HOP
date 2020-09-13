@@ -30,13 +30,15 @@ export default class Level {
         firstPlatformLocation[1] + CONSTANTS.PLATFORM_SPACING * 2
       ),
     ];
+    console.log('con')
   }
 
   randomPlatform(location) {
+    console.log('plat')
     const heightRange =
-      this.dimensions.height - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
+      Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
     const spaceRange =
-      this.dimensions.width - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
+      Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
     // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
     // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
     const platform = {
@@ -93,9 +95,11 @@ export default class Level {
   }
 
   drawPlatforms(ctx) {
+    console.log('draw')
     this.eachPlatform(function (platform) {
-      ctx.fillStyle = "green";
-
+      console.log(platform)
+      ctx.fillStyle = "#6a0dad";
+      console.log(ctx)
       //draw platform
       ctx.fillRect(
         platform.left,
