@@ -36,4 +36,22 @@ body {
     background-position-y: bottom; */
     /* background-position: left; */
     /* background-position: top; */
+    display: flex;
+    align-items: center;
+
+}
+
+.render-game {
+    margin-left: 35%;
+    margin-right: 5%;
+}
+
+.directions {
+    height: 500px;
+    width: 400px;
+    border: 10px solid salmon;
+}
+
+.directions > img {
+    background-color: transparent;
 }

@@ -5,19 +5,23 @@ export default class DoodleJump {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.dimensions = { width: canvas.width, height: canvas.height };
+    // console.log((2/3) * canvas.width)
+    // console.log((4/5) * canvas.height)
     this.registerEvents();
     this.restart();
-    console.log('tf')
+    // console.log('tf')
   }
 
   play() {
-    console.log('play')
+    // console.log('play')
     this.running = true;
+
+    // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
     this.animate();
   }
 
   restart() {
-    console.log('res')
+    // console.log('res')
     this.running = false;
     this.score = 0;
     this.player = new Player(this.dimensions);
@@ -27,7 +31,7 @@ export default class DoodleJump {
   }
 
   registerEvents() {
-    console.log('reg')
+    // console.log('reg')
     this.boundKeyStrokeHandler = this.keyStroke.bind(this);
     document.addEventListener("keydown", this.boundKeyStrokeHandler);
   }
@@ -35,27 +39,37 @@ export default class DoodleJump {
   keyStroke(e) {
     // console.log('key')
     let keyCode = e.keyCode;
-    console.log(keyCode);
+    // console.log(keyCode);
     if (!this.running) this.play();
 
     switch (keyCode) {
+      case 32:
+        // this.ball.shootBall()
+        break;
       case 37:
-        console.log('l')
+        // console.log('l')
         this.player.movePlayer("left");
         break;
+      case 38:
+        this.player.movePlayer("up");
+        break;
       case 39:
-        console.log('r')
+        // console.log('r')
         this.player.movePlayer("right")
+        break;
+      case 40:
+        this.player.movePlayer("down");
+        break;
       default:
         // console.log('eslse')
         break;
     }
+
     // this.player.jump();
   }
 
   gameOver() {
     return (
-      this.level.collidesWith(this.player.bounds()) ||
       this.player.outOfBounds()
     );
   }
@@ -78,8 +92,14 @@ export default class DoodleJump {
     //we see if they have scored a point by passing a platform
     this.level.landedPlatform(this.player.bounds(), () => {
       this.score += 1;
+      this.player.movePlayer("up");
       console.log(this.score);
     });
+
+    // if (this.level.collidesWith(this.player.bounds())) {
+    //   console.log("laksjdf;ljaskjfl;aksjfl;djas;lkjdf");
+    //   this.player.movePlayer("up");
+    // }
 
     //and draw the score
     this.drawScore();

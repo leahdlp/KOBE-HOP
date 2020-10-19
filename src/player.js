@@ -1,7 +1,8 @@
 const CONSTANTS = {
   GRAVITY: 0.4,
-  JUMP_SPEED: 8,
-  TERMINAL_VEL: 12,
+  JUMP_SPEED: 100,
+  FALL_SPEED: 1,
+  TERMINAL_VEL: 7.5,
   PLAYER_WIDTH: 40,
   PLAYER_HEIGHT: 40,
 };
@@ -15,21 +16,39 @@ class Player {
     this.vel = 0;
   }
 
+  fall() {
+    this.vel = CONSTANTS.FALL_SPEED
+  }
+
   jump() {
     //if this were a more realistic player simulation, we would be adding to the velocity
     //instead of just assigning it outright
     //to make the experience more fun and 'bouncy' we just set it directly
     this.vel = -1 * CONSTANTS.JUMP_SPEED;
-    this.y += this.vel;
-    this.movePlayer()
+    // this.movePlayer()
   }
-
+  
   movePlayer(dir="") {
     if (dir === "right") {
-        this.x += 10
+      this.x += 25
     } else if (dir === "left") {
-        this.x -= 10
+      this.x -= 25
+    } else if (dir === "up") {
+      this.jump()
+      // console.log(this.y)
+      // let max_height = this.y + this.vel
+      // this.y = max_height;
+      setInterval(() => this.y += this.vel, 30);
+      // // console.log(this.y)
+      // if (this.y === (max_height)) {
+      //   this.fall();
+      //   while (!this.outOfBounds) this.y += this.vel;
     }
+    // } else if (dir === "down") {
+      // this.fall()
+      // setInterval(() => this.y += this.vel, 30);
+    // }
+
     //for each frame, the Player should move by it's current velocity
     //velocity is 'pixels per frame', so each frame it should update position by vel
     //the acceleration of gravity is in pixels per second per second
@@ -72,6 +91,9 @@ class Player {
     const belowTheBottom =
       this.y + CONSTANTS.PLAYER_HEIGHT > this.dimensions.height;
     return belowTheBottom;
+
+
+
   }
 }
 

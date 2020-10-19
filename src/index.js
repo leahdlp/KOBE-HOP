@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const game = new Game(game_canv, bg_canv);
   // new GameView(game, ctx).start();
   // console.log(canvasEle)
-  console.log(
-    'webapck is working'
-  )
+  // console.log(
+    // 'webapck is working'
+  // )
 
   // window.MovingObject = MovingObject;
 });

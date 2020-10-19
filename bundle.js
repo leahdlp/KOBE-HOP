@@ -115,23 +115,25 @@ var DoodleJump = /*#__PURE__*/function () {
     this.dimensions = {
       width: canvas.width,
       height: canvas.height
-    };
+    }; // console.log((2/3) * canvas.width)
+    // console.log((4/5) * canvas.height)
+
     this.registerEvents();
-    this.restart();
-    console.log('tf');
+    this.restart(); // console.log('tf')
   }
 
   _createClass(DoodleJump, [{
     key: "play",
     value: function play() {
-      console.log('play');
-      this.running = true;
+      // console.log('play')
+      this.running = true; // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
+
       this.animate();
     }
   }, {
     key: "restart",
     value: function restart() {
-      console.log('res');
+      // console.log('res')
       this.running = false;
       this.score = 0;
       this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this.dimensions);
@@ -141,7 +143,7 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "registerEvents",
     value: function registerEvents() {
-      console.log('reg');
+      // console.log('reg')
       this.boundKeyStrokeHandler = this.keyStroke.bind(this);
       document.addEventListener("keydown", this.boundKeyStrokeHandler);
     }
@@ -149,19 +151,32 @@ var DoodleJump = /*#__PURE__*/function () {
     key: "keyStroke",
     value: function keyStroke(e) {
       // console.log('key')
-      var keyCode = e.keyCode;
-      console.log(keyCode);
+      var keyCode = e.keyCode; // console.log(keyCode);
+
       if (!this.running) this.play();
 
       switch (keyCode) {
+        case 32:
+          // this.ball.shootBall()
+          break;
+
         case 37:
-          console.log('l');
+          // console.log('l')
           this.player.movePlayer("left");
           break;
 
+        case 38:
+          this.player.movePlayer("up");
+          break;
+
         case 39:
-          console.log('r');
+          // console.log('r')
           this.player.movePlayer("right");
+          break;
+
+        case 40:
+          this.player.movePlayer("down");
+          break;
 
         default:
           // console.log('eslse')
@@ -172,7 +187,7 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      return this.level.collidesWith(this.player.bounds()) || this.player.outOfBounds();
+      return this.player.outOfBounds();
     } //this is the key method of gaming action
     //animate tells the game to advance one bit
     //the bird moves, the level moves
@@ -196,8 +211,15 @@ var DoodleJump = /*#__PURE__*/function () {
 
       this.level.landedPlatform(this.player.bounds(), function () {
         _this.score += 1;
+
+        _this.player.movePlayer("up");
+
         console.log(_this.score);
-      }); //and draw the score
+      }); // if (this.level.collidesWith(this.player.bounds())) {
+      //   console.log("laksjdf;ljaskjfl;aksjfl;djas;lkjdf");
+      //   this.player.movePlayer("up");
+      // }
+      //and draw the score
 
       this.drawScore(); //if the game is NOT running, we do not animate the next frame
 
@@ -255,8 +277,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](game_canv, bg_canv); // new GameView(game, ctx).start();
   // console.log(canvasEle)
-
-  console.log('webapck is working'); // window.MovingObject = MovingObject;
+  // console.log(
+  // 'webapck is working'
+  // )
+  // window.MovingObject = MovingObject;
 }); // class DoodleJump {
 //   constructor(canvas) {
 //     this.ctx = canvas.getContext("2d");
@@ -562,28 +586,40 @@ var CONSTANTS = {
   //   PLATFORM_SPEED: 2,
   GAP_HEIGHT: 175,
   GAP_WIDTH: 60,
-  PLATFORM_HEIGHT: 25,
-  PLATFORM_WIDTH: 75,
+  PLATFORM_HEIGHT: 20,
+  PLATFORM_WIDTH: 100,
   EDGE_BUFFER: 50,
   PLATFORM_SPACING: [100, 100] //   WARM_UP_SECONDS: 1,
 
-};
+}; // need to push
 
 var Level = /*#__PURE__*/function () {
   function Level(dimensions) {
     _classCallCheck(this, Level);
 
     this.dimensions = dimensions;
-    var firstPlatformLocation = [this.dimensions.height / 5, this.dimensions.width / 3]; //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
+    var firstPlatformLocation = [// this.dimensions.height,
+    // 10,
+    // this.dimensions.width,
+    // this.dimensions.height
+    2 * this.dimensions.width / 3, 4 * this.dimensions.height / 5]; //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
 
-    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform(firstPlatformLocation[0] + CONSTANTS.PLATFORM_SPACING, firstPlatformLocation[1] + CONSTANTS.PLATFORM_SPACING), this.randomPlatform(firstPlatformLocation[0] + CONSTANTS.PLATFORM_SPACING * 2, firstPlatformLocation[1] + CONSTANTS.PLATFORM_SPACING * 2)];
-    console.log('con');
+    var _int = this.getRandomInt;
+    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(3), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(3)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(4), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(4)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(5), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(5)])]; // console.log('con')
   }
 
   _createClass(Level, [{
+    key: "getRandomInt",
+    value: function getRandomInt(max) {
+      var _int2 = Math.floor(Math.random() * Math.floor(max));
+
+      if (_int2 === 0) return 1;
+      return _int2;
+    }
+  }, {
     key: "randomPlatform",
     value: function randomPlatform(location) {
-      console.log('plat');
+      // console.log('plat')
       var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
       var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
@@ -595,12 +631,19 @@ var Level = /*#__PURE__*/function () {
         bottom: CONSTANTS.PLATFORM_HEIGHT + location[1],
         landed: false
       };
+      console.log(location[0] + CONSTANTS.PLATFORM_WIDTH);
+      console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
+      console.log(CONSTANTS.PLATFORM_HEIGHT);
+      console.log('left', platform.left);
+      console.log('right', platform.right);
+      console.log('top', platform.top);
+      console.log('bottom', platform.bottom);
       return platform;
     }
   }, {
     key: "animate",
     value: function animate(ctx) {
-      this.drawBackground(ctx);
+      // this.drawBackground(ctx)
       this.drawPlatforms(ctx);
       this.movePlatform();
     }
@@ -618,9 +661,10 @@ var Level = /*#__PURE__*/function () {
     key: "landedPlatform",
     value: function landedPlatform(player, callback) {
       this.eachPlatform(function (platform) {
-        if (platform.top < player.bottom) {
+        if (platform.top === player.bottom) {
           if (!platform.landed) {
             platform.landed = true;
+            console.log('landed');
             callback();
           }
         }
@@ -644,13 +688,14 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
-      console.log('draw');
+      // console.log('draw')
       this.eachPlatform(function (platform) {
-        console.log(platform);
-        ctx.fillStyle = "#6a0dad";
-        console.log(ctx); //draw platform
+        // console.log(platform)
+        // ctx.fillStyle = "#6a0dad";
+        ctx.fillStyle = "skyblue"; // console.log(ctx)
+        //draw platform
 
-        ctx.fillRect(platform.left, platform.top, CONSTANTS.Platform_WIDTH, platform.top - platform.bottom);
+        ctx.fillRect(platform.left, platform.top, CONSTANTS.PLATFORM_WIDTH, CONSTANTS.PLATFORM_HEIGHT);
       });
     }
   }, {
@@ -666,21 +711,34 @@ var Level = /*#__PURE__*/function () {
       //this function returns true if the the rectangles overlap
       var _overlap = function _overlap(platform, object) {
         //check that they don't overlap in the x axis
-        if (object.left < platform.right && object.left > platform.left || platform.right < object.right && platform.left < object.right) {
-          if (object.bottom < platform.top) return true;
-          return false;
-        } //check that they don't overlap in the y axis
-        //   if (objecttop > platform.bottom || objectbottom > platform.top) {
-        //     return false;
-        //   }
-        //   return true;
+        var objLeftOnPlat = object.left < platform.right && object.left > platform.left;
+        var objRightOnPlat = object.right < platform.right && object.right > platform.left;
 
+        if (!objLeftOnPlat && !objRightOnPlat) {
+          return false; // if (object.bottom < platform.top) return true;
+          // return false;
+        } //check that they don't overlap in the y axis
+
+
+        var objTopAbovePlatBot = object.top > platform.bottom;
+        var objBotOnPlatTop = object.bottom === platform.top;
+
+        if (!objBotOnPlatTop) {
+          return false;
+        }
+
+        return true;
       };
 
       var collision = false;
       this.eachPlatform(function (platform) {
         //check if the bird is overlapping (colliding) with either platform
-        if (_overlap(platform, player)) collision = true; // _overlap(platform.bottomPlatform, player)
+        if (_overlap(platform, player)) {
+          collision = true;
+          console.log(collision);
+          player.movePlayer("up");
+        } // _overlap(platform.bottomPlatform, player)
+
       });
       return collision;
     }
@@ -710,8 +768,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var CONSTANTS = {
   GRAVITY: 0.4,
-  JUMP_SPEED: 8,
-  TERMINAL_VEL: 12,
+  JUMP_SPEED: 100,
+  FALL_SPEED: 1,
+  TERMINAL_VEL: 7.5,
   PLAYER_WIDTH: 40,
   PLAYER_HEIGHT: 40
 };
@@ -728,25 +787,45 @@ var Player = /*#__PURE__*/function () {
   }
 
   _createClass(Player, [{
+    key: "fall",
+    value: function fall() {
+      this.vel = CONSTANTS.FALL_SPEED;
+    }
+  }, {
     key: "jump",
     value: function jump() {
       //if this were a more realistic player simulation, we would be adding to the velocity
       //instead of just assigning it outright
       //to make the experience more fun and 'bouncy' we just set it directly
-      this.vel = -1 * CONSTANTS.JUMP_SPEED;
-      this.y += this.vel;
-      this.movePlayer();
+      this.vel = -1 * CONSTANTS.JUMP_SPEED; // this.movePlayer()
     }
   }, {
     key: "movePlayer",
     value: function movePlayer() {
+      var _this = this;
+
       var dir = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
 
       if (dir === "right") {
-        this.x += 10;
+        this.x += 25;
       } else if (dir === "left") {
-        this.x -= 10;
-      } //for each frame, the Player should move by it's current velocity
+        this.x -= 25;
+      } else if (dir === "up") {
+        this.jump(); // console.log(this.y)
+        // let max_height = this.y + this.vel
+        // this.y = max_height;
+
+        setInterval(function () {
+          return _this.y += _this.vel;
+        }, 30); // // console.log(this.y)
+        // if (this.y === (max_height)) {
+        //   this.fall();
+        //   while (!this.outOfBounds) this.y += this.vel;
+      } // } else if (dir === "down") {
+      // this.fall()
+      // setInterval(() => this.y += this.vel, 30);
+      // }
+      //for each frame, the Player should move by it's current velocity
       //velocity is 'pixels per frame', so each frame it should update position by vel
       //the acceleration of gravity is in pixels per second per second
       //so each second, it changes the velocity by whatever the gravity constant is
