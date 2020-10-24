@@ -49,9 +49,39 @@ body {
 .directions {
     height: 500px;
     width: 400px;
-    border: 10px solid salmon;
+    border-radius: 36px;
+    /* border: 10px solid salmon; */
+    background-color: rgba(255, 255, 255, 0.185);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.directions > img {
+.directions > h1 {
+    color: white;
+    font-size: 36px;
+    font-weight: 800;
+    font-family: 'Rubik', sans-serif;
+    margin: 5% 0%;
+}
+
+.directions p {
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    margin: 2.5% 0%;
+
+}
+
+#arrows {
+    height: 40%;
+    width: 75%;
     background-color: transparent;
+    /* color: white; */
+}
+
+#space {
+    height: 10%;
+    width: 75%;
+    border-radius: 10px;
+    margin-top: 3.5%;
 }

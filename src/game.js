@@ -9,11 +9,11 @@ export default class DoodleJump {
     // console.log((4/5) * canvas.height)
     this.registerEvents();
     this.restart();
-    // console.log('tf')
+    console.log('constructor')
   }
 
   play() {
-    // console.log('play')
+    console.log('play')
     this.running = true;
 
     // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
@@ -21,7 +21,7 @@ export default class DoodleJump {
   }
 
   restart() {
-    // console.log('res')
+    console.log('restart')
     this.running = false;
     this.score = 0;
     this.player = new Player(this.dimensions);
@@ -31,13 +31,13 @@ export default class DoodleJump {
   }
 
   registerEvents() {
-    // console.log('reg')
+    console.log('registerEvents')
     this.boundKeyStrokeHandler = this.keyStroke.bind(this);
     document.addEventListener("keydown", this.boundKeyStrokeHandler);
   }
 
   keyStroke(e) {
-    // console.log('key')
+    console.log('keyStroke')
     let keyCode = e.keyCode;
     // console.log(keyCode);
     if (!this.running) this.play();
@@ -79,39 +79,46 @@ export default class DoodleJump {
   //the bird moves, the level moves
   //everything is redrawn to the screen
   animate() {
+    console.log('animate')
     //first we move and draw the level
+    console.log('animate level')
     this.level.animate(this.ctx);
     //then we move and draw the bird
+    console.log('animate player')
     this.player.animate(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
+      console.log('game over')
       alert(this.score);
       this.restart();
     }
 
-    //we see if they have scored a point by passing a platform
+    // //we see if they have scored a point by passing a platform
     this.level.landedPlatform(this.player.bounds(), () => {
       this.score += 1;
       this.player.movePlayer("up");
       console.log(this.score);
     });
 
-    // if (this.level.collidesWith(this.player.bounds())) {
-    //   console.log("laksjdf;ljaskjfl;aksjfl;djas;lkjdf");
-    //   this.player.movePlayer("up");
-    // }
+    if (this.level.collidesWith(this.player.bounds())) {
+      console.log("if collidesWith");
+      this.player.movePlayer("up");
+    }
 
     //and draw the score
+    console.log('draw score')
     this.drawScore();
 
     //if the game is NOT running, we do not animate the next frame
     if (this.running) {
+      console.log('if running...requestAnimationFrame')
       //This calls this function again, after around 1/60th of a second
       requestAnimationFrame(this.animate.bind(this));
     }
   }
 
   drawScore() {
+    console.log('draw score')
     //loc will be the location
     const loc = { x: ( 5 * this.dimensions.width) / 6, y: this.dimensions.height / 6 };
     this.ctx.font = "bold 50pt serif";

@@ -119,13 +119,14 @@ var DoodleJump = /*#__PURE__*/function () {
     // console.log((4/5) * canvas.height)
 
     this.registerEvents();
-    this.restart(); // console.log('tf')
+    this.restart();
+    console.log('constructor');
   }
 
   _createClass(DoodleJump, [{
     key: "play",
     value: function play() {
-      // console.log('play')
+      console.log('play');
       this.running = true; // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
 
       this.animate();
@@ -133,7 +134,7 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "restart",
     value: function restart() {
-      // console.log('res')
+      console.log('restart');
       this.running = false;
       this.score = 0;
       this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this.dimensions);
@@ -143,14 +144,14 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "registerEvents",
     value: function registerEvents() {
-      // console.log('reg')
+      console.log('registerEvents');
       this.boundKeyStrokeHandler = this.keyStroke.bind(this);
       document.addEventListener("keydown", this.boundKeyStrokeHandler);
     }
   }, {
     key: "keyStroke",
     value: function keyStroke(e) {
-      // console.log('key')
+      console.log('keyStroke');
       var keyCode = e.keyCode; // console.log(keyCode);
 
       if (!this.running) this.play();
@@ -198,15 +199,19 @@ var DoodleJump = /*#__PURE__*/function () {
     value: function animate() {
       var _this = this;
 
-      //first we move and draw the level
+      console.log('animate'); //first we move and draw the level
+
+      console.log('animate level');
       this.level.animate(this.ctx); //then we move and draw the bird
 
+      console.log('animate player');
       this.player.animate(this.ctx); //then we check to see if the game is over and let the player know
 
       if (this.gameOver()) {
+        console.log('game over');
         alert(this.score);
         this.restart();
-      } //we see if they have scored a point by passing a platform
+      } // //we see if they have scored a point by passing a platform
 
 
       this.level.landedPlatform(this.player.bounds(), function () {
@@ -215,23 +220,28 @@ var DoodleJump = /*#__PURE__*/function () {
         _this.player.movePlayer("up");
 
         console.log(_this.score);
-      }); // if (this.level.collidesWith(this.player.bounds())) {
-      //   console.log("laksjdf;ljaskjfl;aksjfl;djas;lkjdf");
-      //   this.player.movePlayer("up");
-      // }
-      //and draw the score
+      });
 
+      if (this.level.collidesWith(this.player.bounds())) {
+        console.log("if collidesWith");
+        this.player.movePlayer("up");
+      } //and draw the score
+
+
+      console.log('draw score');
       this.drawScore(); //if the game is NOT running, we do not animate the next frame
 
       if (this.running) {
-        //This calls this function again, after around 1/60th of a second
+        console.log('if running...requestAnimationFrame'); //This calls this function again, after around 1/60th of a second
+
         requestAnimationFrame(this.animate.bind(this));
       }
     }
   }, {
     key: "drawScore",
     value: function drawScore() {
-      //loc will be the location
+      console.log('draw score'); //loc will be the location
+
       var loc = {
         x: 5 * this.dimensions.width / 6,
         y: this.dimensions.height / 6
@@ -597,6 +607,7 @@ var Level = /*#__PURE__*/function () {
   function Level(dimensions) {
     _classCallCheck(this, Level);
 
+    console.log('level constructor');
     this.dimensions = dimensions;
     var firstPlatformLocation = [// this.dimensions.height,
     // 10,
@@ -605,7 +616,9 @@ var Level = /*#__PURE__*/function () {
     2 * this.dimensions.width / 3, 4 * this.dimensions.height / 5]; //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
 
     var _int = this.getRandomInt;
-    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(3), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(3)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(4), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(4)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(5), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(5)])]; // console.log('con')
+    console.log(firstPlatformLocation);
+    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(3), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(3)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(4), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(4)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(5), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(5)])];
+    console.log('con platforms:', this.platforms);
   }
 
   _createClass(Level, [{
@@ -619,37 +632,46 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "randomPlatform",
     value: function randomPlatform(location) {
-      // console.log('plat')
+      console.log('randomPlatform');
+      console.log('lcoation', location);
       var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
+      console.log(heightRange);
+      console.log(CONSTANTS.PLATFORM_HEIGHT + location[1]);
+      console.log(location[1]);
       var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
 
       var platform = {
-        left: location[0],
-        right: CONSTANTS.PLATFORM_WIDTH + location[0],
-        top: location[1],
-        bottom: CONSTANTS.PLATFORM_HEIGHT + location[1],
+        left: (location[0] + spaceRange) % this.dimensions.width,
+        right: (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width,
+        top: (location[1] + heightRange) % this.dimensions.height,
+        bottom: (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height,
         landed: false
-      };
-      console.log(location[0] + CONSTANTS.PLATFORM_WIDTH);
-      console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
-      console.log(CONSTANTS.PLATFORM_HEIGHT);
-      console.log('left', platform.left);
-      console.log('right', platform.right);
-      console.log('top', platform.top);
-      console.log('bottom', platform.bottom);
+      }; // console.log(location[0] + CONSTANTS.PLATFORM_WIDTH)
+      // console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
+      // console.log(CONSTANTS.PLATFORM_HEIGHT)
+      // console.log('left', platform.left)
+      // console.log('right', platform.right);
+      // console.log('top', platform.top);
+      // console.log('bottom', platform.bottom);
+
       return platform;
     }
   }, {
     key: "animate",
     value: function animate(ctx) {
-      // this.drawBackground(ctx)
+      console.log('level animate');
+      console.log('drawBackground');
+      this.drawBackground(ctx);
+      console.log("drawPlatforms");
       this.drawPlatforms(ctx);
+      console.log("movePlatform");
       this.movePlatform();
     }
   }, {
     key: "drawBackground",
     value: function drawBackground(ctx) {
+      console.log('this.drawBackground');
       var background = new Image();
       background.src = "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg"; // background.onload = function() {
 
@@ -673,6 +695,7 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "movePlatform",
     value: function movePlatform() {
+      console.log('this.movePlatform');
       this.eachPlatform(function (platform) {
         platform.top -= CONSTANTS.PLATFORM_SPEED;
         platform.bottom -= CONSTANTS.PLATFORM_SPEED;
@@ -688,11 +711,11 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
-      // console.log('draw')
+      console.log('this.drawPlatforms');
       this.eachPlatform(function (platform) {
         // console.log(platform)
         // ctx.fillStyle = "#6a0dad";
-        ctx.fillStyle = "skyblue"; // console.log(ctx)
+        ctx.fillStyle = "green"; // console.log(ctx)
         //draw platform
 
         ctx.fillRect(platform.left, platform.top, CONSTANTS.PLATFORM_WIDTH, CONSTANTS.PLATFORM_HEIGHT);
@@ -701,6 +724,7 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "eachPlatform",
     value: function eachPlatform(callback) {
+      console.log('this.eachPlatform');
       this.platforms.forEach(callback.bind(this));
     } //This method shall return true if the bird passed in is currently
     //colliding with any platform.
@@ -709,10 +733,15 @@ var Level = /*#__PURE__*/function () {
     key: "collidesWith",
     value: function collidesWith(player) {
       //this function returns true if the the rectangles overlap
+      console.log('this.collidesWith');
+
       var _overlap = function _overlap(platform, object) {
-        //check that they don't overlap in the x axis
-        var objLeftOnPlat = object.left < platform.right && object.left > platform.left;
-        var objRightOnPlat = object.right < platform.right && object.right > platform.left;
+        console.log('_overlap'); //check that they don't overlap in the x axis
+
+        var objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
+        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left;
+        console.log(object);
+        console.log(platform);
 
         if (!objLeftOnPlat && !objRightOnPlat) {
           return false; // if (object.bottom < platform.top) return true;
@@ -735,11 +764,14 @@ var Level = /*#__PURE__*/function () {
         //check if the bird is overlapping (colliding) with either platform
         if (_overlap(platform, player)) {
           collision = true;
+          console.log(platform);
           console.log(collision);
           player.movePlayer("up");
         } // _overlap(platform.bottomPlatform, player)
 
       });
+      console.log('collision:');
+      console.log(collision);
       return collision;
     }
   }]);

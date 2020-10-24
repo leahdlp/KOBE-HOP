@@ -13,6 +13,7 @@ const CONSTANTS = {
 
 export default class Level {
   constructor(dimensions) {
+    console.log('level constructor')
     this.dimensions = dimensions;
 
     const firstPlatformLocation = [
@@ -26,6 +27,8 @@ export default class Level {
     ]
     //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
     const int = this.getRandomInt
+
+    console.log(firstPlatformLocation)
 
     this.platforms = [
       this.randomPlatform(firstPlatformLocation),
@@ -48,7 +51,7 @@ export default class Level {
         ]
       ),
     ];
-    // console.log('con')
+    console.log('con platforms:', this.platforms)
   }
 
   getRandomInt(max) {
@@ -59,43 +62,53 @@ export default class Level {
   }
 
   randomPlatform(location) {
-    // console.log('plat')
+    console.log('randomPlatform')
+    console.log('lcoation', location)
     const heightRange =
       Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
+
+      console.log(heightRange)
+      console.log(CONSTANTS.PLATFORM_HEIGHT + location[1])
+      console.log(location[1])
     const spaceRange =
       Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
     // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
     // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
     const platform = {
-        left: location[0],
-        right: CONSTANTS.PLATFORM_WIDTH + location[0],
-        top: location[1],
-        bottom: CONSTANTS.PLATFORM_HEIGHT + location[1],
+        left: (location[0] + spaceRange) % this.dimensions.width,
+        right: (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width,
+        top: (location[1] + heightRange) % this.dimensions.height,
+        bottom: (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height,
         landed: false,
     };
 
-    console.log(location[0] + CONSTANTS.PLATFORM_WIDTH)
-    console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
+    // console.log(location[0] + CONSTANTS.PLATFORM_WIDTH)
+    // console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
 
-    console.log(CONSTANTS.PLATFORM_HEIGHT)
+    // console.log(CONSTANTS.PLATFORM_HEIGHT)
 
-    console.log('left', platform.left)
-    console.log('right', platform.right);
+    // console.log('left', platform.left)
+    // console.log('right', platform.right);
 
-    console.log('top', platform.top);
+    // console.log('top', platform.top);
 
-    console.log('bottom', platform.bottom);
+    // console.log('bottom', platform.bottom);
 
     return platform;
   }
 
   animate(ctx) {
-    // this.drawBackground(ctx)
+    console.log('level animate')
+    console.log('drawBackground')
+    this.drawBackground(ctx)
+    console.log("drawPlatforms");
     this.drawPlatforms(ctx);
+    console.log("movePlatform");
     this.movePlatform();
   }
 
   drawBackground(ctx) {
+      console.log('this.drawBackground')
       let background = new Image();
       background.src =
           "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
@@ -119,6 +132,7 @@ export default class Level {
   }
 
   movePlatform() {
+    console.log('this.movePlatform')
     this.eachPlatform(function (platform) {
       platform.top -= CONSTANTS.PLATFORM_SPEED;
       platform.bottom -= CONSTANTS.PLATFORM_SPEED;
@@ -134,11 +148,11 @@ export default class Level {
   }
 
   drawPlatforms(ctx) {
-    // console.log('draw')
+    console.log('this.drawPlatforms');
     this.eachPlatform(function (platform) {
       // console.log(platform)
       // ctx.fillStyle = "#6a0dad";
-      ctx.fillStyle = "skyblue"
+      ctx.fillStyle = "green"
       // console.log(ctx)
       //draw platform
       ctx.fillRect(
@@ -151,17 +165,22 @@ export default class Level {
   }
 
   eachPlatform(callback) {
+    console.log('this.eachPlatform');
     this.platforms.forEach(callback.bind(this));
   }
   //This method shall return true if the bird passed in is currently
   //colliding with any platform.
   collidesWith(player) {
     //this function returns true if the the rectangles overlap
+    console.log('this.collidesWith')
     const _overlap = (platform, object) => {
+      console.log('_overlap')
       //check that they don't overlap in the x axis
-      const objLeftOnPlat = object.left < platform.right && object.left > platform.left;
-      const objRightOnPlat = object.right < platform.right && object.right > platform.left;
+      const objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
+      const objRightOnPlat = object.right <= platform.right && object.right >= platform.left;
 
+      console.log(object)
+      console.log(platform)
       if (!objLeftOnPlat && !objRightOnPlat) {
         return false;
         // if (object.bottom < platform.top) return true;
@@ -182,11 +201,15 @@ export default class Level {
         //check if the bird is overlapping (colliding) with either platform
       if (_overlap(platform, player)) {
         collision = true;
+        console.log(platform)
         console.log(collision)
         player.movePlayer("up")
       }
         // _overlap(platform.bottomPlatform, player)
     });
+
+    console.log('collision:')
+    console.log(collision)
     return collision;
   }
 }
