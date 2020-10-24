@@ -1,3 +1,5 @@
+import Ball from './ball'
+
 const CONSTANTS = {
   GRAVITY: 0.4,
   JUMP_SPEED: 100,
@@ -38,7 +40,11 @@ class Player {
       // console.log(this.y)
       // let max_height = this.y + this.vel
       // this.y = max_height;
-      setInterval(() => this.y += this.vel, 30);
+      setInterval(() => {
+        this.y += this.vel
+        
+        if (this.y > (this.bounds.top + 100)) this.y = this.bounds.top + 100
+      }, 30);
       // // console.log(this.y)
       // if (this.y === (max_height)) {
       //   this.fall();
@@ -91,8 +97,10 @@ class Player {
     const belowTheBottom =
       this.y + CONSTANTS.PLAYER_HEIGHT > this.dimensions.height;
     return belowTheBottom;
+  }
 
-
+  shootBall() {
+    const ball = new Ball()
 
   }
 }

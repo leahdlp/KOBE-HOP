@@ -109,12 +109,12 @@ export default class Level {
 
   drawBackground(ctx) {
       console.log('this.drawBackground')
-      let background = new Image();
-      background.src =
-          "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
-      // background.onload = function() {
+      const background = new Image();
+      background.onload = function() {
           ctx.drawImage(background, -100, -110)
-      // }
+      }
+      // background.src =
+          // "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
     // ctx.fillStyle = "skyblue";
     // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
   }

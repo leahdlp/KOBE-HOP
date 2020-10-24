@@ -7,6 +7,11 @@ export default class DoodleJump {
     this.dimensions = { width: canvas.width, height: canvas.height };
     // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
+
+    this.balls = [];
+    this.hoops = [];
+    this.defenders = [];
+
     this.registerEvents();
     this.restart();
     console.log('constructor')
@@ -44,7 +49,7 @@ export default class DoodleJump {
 
     switch (keyCode) {
       case 32:
-        // this.ball.shootBall()
+        // this.player.shootBall()
         break;
       case 37:
         // console.log('l')

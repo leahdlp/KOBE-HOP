@@ -86,6 +86,28 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/ball.js":
+/*!*********************!*\
+  !*** ./src/ball.js ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Ball; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ball = function Ball() {// this.ctx = canvas.getContext("2d");
+  // this.dimensions = { width: , height: }
+
+  _classCallCheck(this, Ball);
+};
+
+
+
+/***/ }),
+
 /***/ "./src/game.js":
 /*!*********************!*\
   !*** ./src/game.js ***!
@@ -118,6 +140,9 @@ var DoodleJump = /*#__PURE__*/function () {
     }; // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
 
+    this.balls = [];
+    this.hoops = [];
+    this.defenders = [];
     this.registerEvents();
     this.restart();
     console.log('constructor');
@@ -158,7 +183,7 @@ var DoodleJump = /*#__PURE__*/function () {
 
       switch (keyCode) {
         case 32:
-          // this.ball.shootBall()
+          // this.player.shootBall()
           break;
 
         case 37:
@@ -673,11 +698,14 @@ var Level = /*#__PURE__*/function () {
     value: function drawBackground(ctx) {
       console.log('this.drawBackground');
       var background = new Image();
-      background.src = "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg"; // background.onload = function() {
 
-      ctx.drawImage(background, -100, -110); // }
+      background.onload = function () {
+        ctx.drawImage(background, -100, -110);
+      }; // background.src =
+      // "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
       // ctx.fillStyle = "skyblue";
       // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+
     }
   }, {
     key: "landedPlatform",
@@ -792,11 +820,13 @@ var Level = /*#__PURE__*/function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ball__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ball */ "./src/ball.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 var CONSTANTS = {
   GRAVITY: 0.4,
@@ -848,7 +878,8 @@ var Player = /*#__PURE__*/function () {
         // this.y = max_height;
 
         setInterval(function () {
-          return _this.y += _this.vel;
+          _this.y += _this.vel;
+          if (_this.y > _this.bounds.top + 100) _this.y = _this.bounds.top + 100;
         }, 30); // // console.log(this.y)
         // if (this.y === (max_height)) {
         //   this.fall();
@@ -903,6 +934,11 @@ var Player = /*#__PURE__*/function () {
       // const aboveTheTop = this.y < 0;
       var belowTheBottom = this.y + CONSTANTS.PLAYER_HEIGHT > this.dimensions.height;
       return belowTheBottom;
+    }
+  }, {
+    key: "shootBall",
+    value: function shootBall() {
+      var ball = new _ball__WEBPACK_IMPORTED_MODULE_0__["default"]();
     }
   }]);
 

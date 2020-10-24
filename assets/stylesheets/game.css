@@ -1,3 +1,9 @@
+/* html {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+} */
+
 #game-title {
     font-size: 48px;
     color: purple;
@@ -6,11 +12,13 @@
 
 #game-canvas {
     display: block;
-    border: RED 1px solid;
+    /* border: RED 1px solid; */
+    background-color: rgba(255, 255, 255, 0.185);
+
 }
 
 #bg-canvas {
-    border: red 10px solid;
+    /* border: red 10px solid; */
 }
 
 .game-container {
@@ -21,8 +29,8 @@
 #game-title {
     text-align: center;
     font-weight: 900;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 body {
@@ -31,19 +39,27 @@ body {
     url(
         "https://www.nba.com/images/cms/2017-06/kobe-2000-Finals.jpg?cw=1920&w=1921&x=0&ch=1080&h=2928&y=288"
     );
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     /* background-position-x: left;
     background-position-y: bottom; */
     /* background-position: left; */
     /* background-position: top; */
     display: flex;
+    flex-direction: column;
     align-items: center;
+}
 
+.main {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 80%;
 }
 
 .render-game {
-    margin-left: 35%;
-    margin-right: 5%;
+    /* margin-left: 35%; */
+    /* margin-right: 5%; */
 }
 
 .directions {
@@ -55,6 +71,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-shadow: 2px 2px black;
 }
 
 .directions > h1 {
@@ -63,13 +80,18 @@ body {
     font-weight: 800;
     font-family: 'Rubik', sans-serif;
     margin: 5% 0%;
+    text-shadow: purple;
 }
 
 .directions p {
     color: white;
     font-family: 'Rubik', sans-serif;
-    margin: 2.5% 0%;
+    margin: 2.5% 5%;
+    color: goldenrod;
 
+}
+
+#concept {
 }
 
 #arrows {
@@ -84,4 +106,27 @@ body {
     width: 75%;
     border-radius: 10px;
     margin-top: 3.5%;
+}
+
+footer {
+    width: 100%;
+    height: 100px;
+    color: white;
+    margin-top: 2%;
+    font-size: 30px;
+    font-family: 'Rubik', sans-serif;
+    background-color: rgba(0, 0, 0, 0.39);
+    /* text-align: center; */
+    /* dis */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.links {
+    color: goldenrod;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 }

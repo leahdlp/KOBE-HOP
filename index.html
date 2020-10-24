@@ -2,32 +2,65 @@
 <html lang="en">
     <head>
         <script type="text/javascript" src="bundle.js" defer></script>
+        <script src="https://kit.fontawesome.com/15006fe439.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="./assets/stylesheets/reset.css">
         <link rel="stylesheet" href="./assets/stylesheets/game.css">
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div>
-            
-        </div>
-        <div class="render-game">
-            <header>
-                <h1 id="game-title">KOBE HOP</h1>
-            </header>
-            <div class="game-container">
-                <canvas id="game-canvas" width="500" height="800">
-                    <!-- <canvas id="bg-canvas" with="400" height="640"></canvas> -->
-                </canvas>
+        <div class="main">
+            <div class="directions">
+                <h1>
+                    WHAT TO DO
+                </h1>
+                <p id="concept">
+                    This is an infinitely running game. The goal is to get as much
+                    points as possible. You get points with each platform that
+                    contributes to your vertical progression. Along the way you 
+                    will encounter defenders trying to prevent you from getting
+                    to the hoop! The only way to come in contact with them and not
+                    lose the game is to bounce on top of them. Whenever you see a
+                    hoop in the game, press spacebar to shoot your ball into it.
+                    Once the hoop is on the screen you will have a shot clock.
+                    If you make your ball in the hoop, you get bonus points. If you
+                    do not shoot by the end of the shot clock, you lose a ball. 
+                    If you run out of all your balls (you start with 3), you lose. 
+                    If you fall off the screen, you lose.
+                </p>
+            </div>
+            <div class="render-game">
+                <header>
+                    <h1 id="game-title">KOBE HOP</h1>
+                </header>
+                <div class="game-container">
+                    <canvas id="game-canvas" width="500" height="800">
+                        <!-- <canvas id="bg-canvas" with="400" height="640"></canvas> -->
+                    </canvas>
+                </div>
+            </div>
+            <div class="directions">
+                <h1>DIRECTIONS</h1>
+                <p>Use ARROW KEYS to move LEFT and RIGHT</p>
+                <img id="arrows" src="https://static.thenounproject.com/png/2082254-200.png" alt="">
+                <p>press SPACEBAR to SHOOT</p>
+                <img id="space" src="/Users/leahdelapena/Documents/AppAcademy/FullTime/JSProject/hoop_jump/assets/images/Screen Shot 2020-10-24 at 2.48.26 PM.png" alt="">
             </div>
         </div>
-        <div class="directions">
-            <h1>DIRECTIONS</h1>
-            <p>Use ARROW KEYS to move LEFT and RIGHT</p>
-            <img id="arrows" src="https://static.thenounproject.com/png/2082254-200.png" alt="">
-            <p>press SPACEBAR to SHOOT</p>
-            <img id="space" src="/Users/leahdelapena/Documents/AppAcademy/FullTime/JSProject/hoop_jump/assets/images/Screen Shot 2020-10-24 at 2.48.26 PM.png" alt="">
-        </div>
         <footer>
+            <div className="Leah">
+                <div>Leah de la Pena</div>
+                <div class="links">
+                    <a href="https://github.com/leahdlp">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/leahdelapena/">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://angel.co/u/leah-de-la-pena">
+                        <i class="fab fa-angellist"></i>
+                    </a>
+                </div>
+            </div>
         </footer>
     </body>
 </html>
