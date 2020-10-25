@@ -131,7 +131,7 @@ var Ball = /*#__PURE__*/function () {
       console.log(ctx);
       ctx.beginPath();
       ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
-      ctx.fillStyle = "orange";
+      ctx.fillStyle = "rgb(161, 87, 2)";
       ctx.fill();
       ctx.closePath(); // this.y += CONSTANTS.dy;
     }
@@ -252,7 +252,8 @@ var DoodleJump = /*#__PURE__*/function () {
   function DoodleJump(canvas) {
     _classCallCheck(this, DoodleJump);
 
-    this.ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d"); // this.backgrnd = canvas2.getContext("2d");
+
     this.dimensions = {
       width: canvas.width,
       height: canvas.height
@@ -362,10 +363,15 @@ var DoodleJump = /*#__PURE__*/function () {
       // console.log('animate')
       //first we move and draw the level
       // console.log('animate level')
-      this.level.animate(this.ctx); //then we move and draw the bird
-      // console.log('animate player')
+      window.setTimeout(function () {
+        _this.level.animate(_this.ctx);
 
-      this.player.animate(this.ctx); //then we check to see if the game is over and let the player know
+        _this.player.animate(_this.ctx);
+
+        _this.drawScore();
+      }, 5000); //then we move and draw the bird
+      // console.log('animate player')
+      //then we check to see if the game is over and let the player know
 
       if (this.gameOver()) {
         // console.log('game over')
@@ -386,9 +392,9 @@ var DoodleJump = /*#__PURE__*/function () {
         this.player.movePlayer("up");
       } //and draw the score
       // console.log('draw score')
+      // this.drawScore();
+      //if the game is NOT running, we do not animate the next frame
 
-
-      this.drawScore(); //if the game is NOT running, we do not animate the next frame
 
       if (this.running) {
         // console.log('if running...requestAnimationFrame')
@@ -439,12 +445,12 @@ __webpack_require__.r(__webpack_exports__);
 // import MovingObject from "./moving_object"
 
 document.addEventListener("DOMContentLoaded", function () {
-  var game_canv = document.getElementById("game-canvas");
-  var bg_canv = document.getElementById("bg-canvas"); // canvasEl.width = Game.DIM_X;
+  var game_canv = document.getElementById("game-canvas"); // const bg_canv = document.getElementById("bg-canvas");
+  // canvasEl.width = Game.DIM_X;
   // canvasEl.height = Game.DIM_Y;
   // const ctx = canvasEle.getContext("2d");
 
-  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](game_canv, bg_canv); // new GameView(game, ctx).start();
+  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](game_canv); // new GameView(game, ctx).start();
   // console.log(canvasEle)
   // console.log(
   // 'webapck is working'
@@ -753,7 +759,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var CONSTANTS = {
   //   PLATFORM_SPEED: 2,
-  GAP_HEIGHT: 175,
+  GAP_HEIGHT: 125,
   GAP_WIDTH: 60,
   PLATFORM_HEIGHT: 20,
   PLATFORM_WIDTH: 100,
@@ -830,15 +836,18 @@ var Level = /*#__PURE__*/function () {
     key: "drawBackground",
     value: function drawBackground(ctx) {
       // console.log('this.drawBackground')
-      var background = new Image();
-
-      background.onload = function () {
-        ctx.drawImage(background, -100, -110);
-      }; // background.src =
+      // const background = new Image();
+      // background.src =
       // "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
+      // background.onload = function() {
+      //     ctx.drawImage(background, -100, -110)
+      // }
+      var canv = document.getElementById("game-canvas");
+      canv.setAttribute("style", "background-image: url('https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg');"); // window.setTimeout
+      // canv.setAttribute("style", "background-position: center")
+      // ctx.setAtr
       // ctx.fillStyle = "skyblue";
       // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
-
     }
   }, {
     key: "landedPlatform",
@@ -942,6 +951,135 @@ var Level = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./src/moving_object.js":
+/*!******************************!*\
+  !*** ./src/moving_object.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MovingObject; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var CONSTANTS = {
+  GRAVITY: 0.4,
+  JUMP_SPEED: 100,
+  FALL_SPEED: 1,
+  TERMINAL_VEL: 7.5,
+  PLAYER_WIDTH: 40,
+  PLAYER_HEIGHT: 40
+};
+
+var MovingObject = /*#__PURE__*/function () {
+  function MovingObject(dimensions) {
+    _classCallCheck(this, MovingObject);
+
+    this.dimensions = dimensions;
+    this.x = this.dimensions.width / 3; // this.y = this.dimensions.height / 2;
+
+    this.y = 760;
+    this.vel = 0;
+    this.balls = [];
+  }
+
+  _createClass(MovingObject, [{
+    key: "jump",
+    value: function jump() {
+      //if this were a more realistic player simulation, we would be adding to the velocity
+      //instead of just assigning it outright
+      //to make the experience more fun and 'bouncy' we just set it directly
+      this.vel = -1 * CONSTANTS.JUMP_SPEED; // this.movePlayer()
+    }
+  }, {
+    key: "move",
+    value: function move() {
+      var _this = this;
+
+      var dir = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+
+      if (dir === "right") {
+        this.x += 25;
+      } else if (dir === "left") {
+        this.x -= 25;
+      } else if (dir === "up") {
+        this.jump(); // console.log(this.y)
+        // let max_height = this.y + this.vel
+        // this.y = max_height;
+
+        setInterval(function () {
+          console.log(_this.y);
+          _this.y += _this.vel;
+          if (_this.y > _this.bounds.top + 100) _this.y = _this.bounds.top + 100;
+        }, 50); // // console.log(this.y)
+        // if (this.y === (max_height)) {
+        //   this.fall();
+        //   while (!this.outOfBounds) this.y += this.vel;
+      } // } else if (dir === "down") {
+      // this.fall()
+      // setInterval(() => this.y += this.vel, 30);
+      // }
+      //for each frame, the Player should move by it's current velocity
+      //velocity is 'pixels per frame', so each frame it should update position by vel
+      //the acceleration of gravity is in pixels per second per second
+      //so each second, it changes the velocity by whatever the gravity constant is
+
+
+      this.vel += CONSTANTS.GRAVITY; //we set a 'terminal velocity', a maximum speed the Player can travel
+      //this keeps the game from becoming too wild because the Player is moving too fast to control
+
+      if (Math.abs(this.vel) > CONSTANTS.TERMINAL_VEL) {
+        //if the terminal velocity is exceeded, we set it to the terminal velicty
+        if (this.vel > 0) {
+          this.vel = CONSTANTS.TERMINAL_VEL;
+        } else {
+          this.vel = CONSTANTS.TERMINAL_VEL * -1;
+        }
+      }
+    }
+  }, {
+    key: "animate",
+    value: function animate(ctx) {
+      this.move();
+      this.draw(ctx);
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      ctx.fillStyle = "yellow";
+      ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    }
+  }, {
+    key: "bounds",
+    value: function bounds() {
+      return {
+        left: this.x,
+        right: this.x + CONSTANTS.PLAYER_WIDTH,
+        top: this.y,
+        bottom: this.y + CONSTANTS.PLAYER_HEIGHT
+      };
+    }
+  }, {
+    key: "outOfBounds",
+    value: function outOfBounds() {
+      // const aboveTheTop = this.y < 0;
+      var belowTheBottom = this.y + CONSTANTS.PLAYER_HEIGHT > this.dimensions.height;
+      return belowTheBottom;
+    }
+  }]);
+
+  return MovingObject;
+}();
+
+
+
+/***/ }),
+
 /***/ "./src/player.js":
 /*!***********************!*\
   !*** ./src/player.js ***!
@@ -952,11 +1090,29 @@ var Level = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ball__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ball */ "./src/ball.js");
+/* harmony import */ var _moving_object__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./moving_object */ "./src/moving_object.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 var CONSTANTS = {
@@ -968,16 +1124,24 @@ var CONSTANTS = {
   PLAYER_HEIGHT: 40
 };
 
-var Player = /*#__PURE__*/function () {
+var Player = /*#__PURE__*/function (_MovingObject) {
+  _inherits(Player, _MovingObject);
+
+  var _super = _createSuper(Player);
+
   function Player(dimensions) {
+    var _this;
+
     _classCallCheck(this, Player);
 
-    this.dimensions = dimensions;
-    this.x = this.dimensions.width / 3; // this.y = this.dimensions.height / 2;
+    _this = _super.call(this, dimensions); // this.dimensions = dimensions;
 
-    this.y = 760;
-    this.vel = 0;
-    this.balls = [];
+    _this.x = _this.dimensions.width / 3; // this.y = this.dimensions.height / 2;
+
+    _this.y = 760;
+    _this.vel = 0;
+    _this.balls = [];
+    return _this;
   }
 
   _createClass(Player, [{
@@ -996,7 +1160,7 @@ var Player = /*#__PURE__*/function () {
   }, {
     key: "movePlayer",
     value: function movePlayer() {
-      var _this = this;
+      var _this2 = this;
 
       var dir = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
 
@@ -1010,9 +1174,9 @@ var Player = /*#__PURE__*/function () {
         // this.y = max_height;
 
         setInterval(function () {
-          console.log(_this.y);
-          _this.y += _this.vel;
-          if (_this.y > _this.bounds.top + 100) _this.y = _this.bounds.top + 100;
+          console.log(_this2.y);
+          _this2.y += _this2.vel;
+          if (_this2.y > _this2.bounds.top + 100) _this2.y = _this2.bounds.top + 100;
         }, 50); // // console.log(this.y)
         // if (this.y === (max_height)) {
         //   this.fall();
@@ -1079,7 +1243,7 @@ var Player = /*#__PURE__*/function () {
   }]);
 
   return Player;
-}();
+}(_moving_object__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Player);
 

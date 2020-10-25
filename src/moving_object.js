@@ -1,6 +1,3 @@
-import Ball from './ball'
-import MovingObject from './moving_object'
-
 const CONSTANTS = {
   GRAVITY: 0.4,
   JUMP_SPEED: 100,
@@ -10,21 +7,15 @@ const CONSTANTS = {
   PLAYER_HEIGHT: 40,
 };
 
-class Player extends MovingObject {
+export default class MovingObject {
   constructor(dimensions) {
-    super(dimensions)
-    
-    // this.dimensions = dimensions;
+    this.dimensions = dimensions;
     this.x = this.dimensions.width / 3;
     // this.y = this.dimensions.height / 2;
     this.y = 760;
     this.vel = 0;
 
     this.balls = [];
-  }
-
-  fall() {
-    this.vel = CONSTANTS.FALL_SPEED
   }
 
   jump() {
@@ -34,22 +25,22 @@ class Player extends MovingObject {
     this.vel = -1 * CONSTANTS.JUMP_SPEED;
     // this.movePlayer()
   }
-  
-  movePlayer(dir="") {
+
+  move(dir = "") {
     if (dir === "right") {
-      this.x += 25
+      this.x += 25;
     } else if (dir === "left") {
-      this.x -= 25
+      this.x -= 25;
     } else if (dir === "up") {
-      this.jump()
+      this.jump();
       // console.log(this.y)
       // let max_height = this.y + this.vel
       // this.y = max_height;
       setInterval(() => {
-        console.log(this.y)
-        this.y += this.vel
-        
-        if (this.y > (this.bounds.top + 100)) this.y = this.bounds.top + 100
+        console.log(this.y);
+        this.y += this.vel;
+
+        if (this.y > this.bounds.top + 100) this.y = this.bounds.top + 100;
       }, 50);
       // // console.log(this.y)
       // if (this.y === (max_height)) {
@@ -57,8 +48,8 @@ class Player extends MovingObject {
       //   while (!this.outOfBounds) this.y += this.vel;
     }
     // } else if (dir === "down") {
-      // this.fall()
-      // setInterval(() => this.y += this.vel, 30);
+    // this.fall()
+    // setInterval(() => this.y += this.vel, 30);
     // }
 
     //for each frame, the Player should move by it's current velocity
@@ -79,13 +70,18 @@ class Player extends MovingObject {
   }
 
   animate(ctx) {
-    this.movePlayer();
-    this.drawPlayer(ctx);
+    this.move();
+    this.draw(ctx);
   }
 
-  drawPlayer(ctx) {
+  draw(ctx) {
     ctx.fillStyle = "yellow";
-    ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    ctx.fillRect(
+      this.x,
+      this.y,
+      CONSTANTS.PLAYER_WIDTH,
+      CONSTANTS.PLAYER_HEIGHT
+    );
   }
 
   bounds() {
@@ -97,22 +93,11 @@ class Player extends MovingObject {
     };
   }
 
-
   outOfBounds() {
     // const aboveTheTop = this.y < 0;
     const belowTheBottom =
       this.y + CONSTANTS.PLAYER_HEIGHT > this.dimensions.height;
     return belowTheBottom;
   }
-
-  shootBall(ctx) {
-    const ball = this.balls.pop()
-    console.log(ctx);
-    ball.animate(ctx);
-
-    ball.moveBall()
-    // setInterval(() => ball.moveBall(), 30);
-  }
 }
 
-export default Player;

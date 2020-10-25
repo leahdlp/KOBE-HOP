@@ -6,10 +6,9 @@
 
 #game-title {
     font-size: 56px;
-    color: purple;
+    color: rgb(80, 1, 80);
     font-family: 'Rubik', sans-serif;
     text-shadow: 2px 2px black;
-
 }
 
 #game-canvas {
@@ -17,9 +16,12 @@
     /* border: RED 1px solid; */
     /* background-color: rgba(0, 0, 0, 0.39); */
     /* background-color: rgba(117, 83, 54, 0.603); */
-    background-color: rgba(43, 42, 42, 0.356);
+    /* background-color: rgba(43, 42, 42, 0.356); */
+    /* background-color: transparent; */
     border-radius: 10px;
-
+    /* background-image: url("https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg"); */
+    background-position: center;
+    
 }
 
 #bg-canvas {
@@ -102,7 +104,7 @@ body {
     font-weight: 800;
     font-family: 'Rubik', sans-serif;
     margin: 5% 0%;
-    text-shadow: purple;
+    text-shadow: rgb(80, 1, 80);
 }
 
 .directions p {

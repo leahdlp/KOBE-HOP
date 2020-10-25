@@ -5,6 +5,7 @@ import Ball from "./ball";
 export default class DoodleJump {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
+    // this.backgrnd = canvas2.getContext("2d");
     this.dimensions = { width: canvas.width, height: canvas.height };
     // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
@@ -102,10 +103,13 @@ export default class DoodleJump {
     // console.log('animate')
     //first we move and draw the level
     // console.log('animate level')
-    this.level.animate(this.ctx);
+    window.setTimeout(() => {
+      this.level.animate(this.ctx);
+      this.player.animate(this.ctx);
+      this.drawScore();
+    }, 5000)
     //then we move and draw the bird
     // console.log('animate player')
-    this.player.animate(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
       // console.log('game over')
@@ -127,7 +131,7 @@ export default class DoodleJump {
 
     //and draw the score
     // console.log('draw score')
-    this.drawScore();
+    // this.drawScore();
 
     //if the game is NOT running, we do not animate the next frame
     if (this.running) {

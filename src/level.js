@@ -1,6 +1,6 @@
 const CONSTANTS = {
 //   PLATFORM_SPEED: 2,
-  GAP_HEIGHT: 175,
+  GAP_HEIGHT: 125,
   GAP_WIDTH: 60,
   PLATFORM_HEIGHT: 20,
   PLATFORM_WIDTH: 100,
@@ -109,12 +109,20 @@ export default class Level {
 
   drawBackground(ctx) {
       // console.log('this.drawBackground')
-      const background = new Image();
-      background.onload = function() {
-          ctx.drawImage(background, -100, -110)
-      }
+      // const background = new Image();
       // background.src =
-          // "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
+        // "https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg";
+      // background.onload = function() {
+      //     ctx.drawImage(background, -100, -110)
+      // }
+      const canv = document.getElementById("game-canvas");
+      canv.setAttribute(
+        "style",
+        "background-image: url('https://cdn3.vectorstock.com/i/1000x1000/15/12/background-of-basketball-court-vector-7441512.jpg');"
+      )
+      // window.setTimeout
+      // canv.setAttribute("style", "background-position: center")
+      // ctx.setAtr
     // ctx.fillStyle = "skyblue";
     // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
   }

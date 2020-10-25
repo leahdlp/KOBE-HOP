@@ -1,6 +1,8 @@
 export default class Hoop {
   constructor(dimensions) {}
 
+    
+
   collidesWith(ball) {
     // this function returns true if the the rectangles overlap
     // console.log("this.collidesWith");

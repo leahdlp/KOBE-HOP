@@ -26,7 +26,7 @@ export default class Ball {
     console.log(ctx);
     ctx.beginPath();
     ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
-    ctx.fillStyle = "orange";
+    ctx.fillStyle = "rgb(161, 87, 2)";
     ctx.fill();
     ctx.closePath();
 
