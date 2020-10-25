@@ -98,11 +98,128 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Ball; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Ball = function Ball() {// this.ctx = canvas.getContext("2d");
-  // this.dimensions = { width: , height: }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  _classCallCheck(this, Ball);
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var CONSTANTS = {
+  dy: 75,
+  GRAVITY: 0.4,
+  TERMINAL_VEL: 7.5
 };
+
+var Ball = /*#__PURE__*/function () {
+  function Ball(coor) {
+    _classCallCheck(this, Ball);
+
+    // this.ctx = canvas.getContext("2d");
+    // this.dimensions = { width: , height: }
+    this.x = coor.x;
+    this.y = coor.y;
+    this.balls = [];
+    this.drawBall = this.drawBall.bind(this);
+    this.up = this.up.bind(this);
+    this.moveBall = this.moveBall.bind(this);
+    this.animate = this.animate.bind(this);
+    this.collidesWith = this.collidesWith.bind(this);
+  }
+
+  _createClass(Ball, [{
+    key: "drawBall",
+    value: function drawBall(ctx) {
+      console.log('draw');
+      console.log(ctx);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
+      ctx.fillStyle = "orange";
+      ctx.fill();
+      ctx.closePath(); // this.y += CONSTANTS.dy;
+    }
+  }, {
+    key: "up",
+    value: function up() {
+      this.vel = -1 * CONSTANTS.dy;
+    }
+  }, {
+    key: "moveBall",
+    value: function moveBall() {
+      var _this = this;
+
+      console.log('move ball');
+      this.up();
+      setInterval(function () {
+        return _this.y += _this.vel;
+      }, 30);
+      this.vel += CONSTANTS.GRAVITY; //we set a 'terminal velocity', a maximum speed the Player can travel
+      //this keeps the game from becoming too wild because the Player is moving too fast to control
+
+      if (Math.abs(this.vel) > CONSTANTS.TERMINAL_VEL) {
+        //if the terminal velocity is exceeded, we set it to the terminal velicty
+        if (this.vel > 0) {
+          this.vel = CONSTANTS.TERMINAL_VEL;
+        } else {
+          this.vel = CONSTANTS.TERMINAL_VEL * -1;
+        }
+      }
+    }
+  }, {
+    key: "animate",
+    value: function animate(ctx) {
+      console.log('animate');
+      console.log(ctx);
+      this.moveBall();
+      this.drawBall(ctx);
+    }
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(defender) {
+      var _this2 = this;
+
+      //this function returns true if the the rectangles overlap
+      console.log("this.collidesWith");
+
+      var _overlap = function _overlap(ball, object) {
+        console.log("_overlap"); //check that they don't overlap in the x axis
+
+        var objLeftOnBall = object.left <= ball.right && object.left >= ball.left;
+        var objRightOnBall = object.right <= ball.right && object.right >= ball.left;
+        console.log(object);
+        console.log(ball);
+
+        if (!objLeftOnBall && !objRightOnBall) {
+          return false; // if (object.bottom < ball.top) return true;
+          // return false;
+        } //check that they don't overlap in the y axis
+
+
+        var objTopAboveBallBot = object.top > ball.bottom;
+        var objBotOnBallTop = object.bottom === ball.top;
+
+        if (!objBotOnBallTop || !objTopAboveBallBot) {
+          return false;
+        }
+
+        return true;
+      };
+
+      var collision = false;
+      this.eachBall(function (ball) {
+        //check if the bird is overlapping (colliding) with either ball
+        if (_overlap(_this2.ball, defender)) {
+          collision = true;
+          console.log(ball);
+          console.log(collision);
+        } // _overlap(ball.bottomball, defender)
+
+      });
+      console.log("collision:");
+      console.log(collision);
+      return collision;
+    }
+  }]);
+
+  return Ball;
+}();
 
 
 
@@ -120,11 +237,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DoodleJump; });
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./level */ "./src/level.js");
+/* harmony import */ var _ball__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ball */ "./src/ball.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -140,18 +259,32 @@ var DoodleJump = /*#__PURE__*/function () {
     }; // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
 
-    this.balls = [];
-    this.hoops = [];
-    this.defenders = [];
+    this.balls; // this.balls = this.player.balls;
+    // this.hoops = [];
+    // this.defenders = [];
+
     this.registerEvents();
-    this.restart();
-    console.log('constructor');
+    this.restart(); // console.log('constructor')
   }
 
   _createClass(DoodleJump, [{
+    key: "gameBalls",
+    value: function gameBalls() {
+      console.log('gameBalls');
+
+      for (var i = 0; i < 3; i++) {
+        this.player.balls.push(new _ball__WEBPACK_IMPORTED_MODULE_2__["default"]({
+          x: this.player.x,
+          y: this.player.y
+        }));
+      }
+
+      console.log(this.player.balls);
+    }
+  }, {
     key: "play",
     value: function play() {
-      console.log('play');
+      // console.log('play')
       this.running = true; // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
 
       this.animate();
@@ -159,31 +292,34 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "restart",
     value: function restart() {
-      console.log('restart');
+      // console.log('restart')
       this.running = false;
       this.score = 0;
       this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this.dimensions);
+      this.gameBalls();
+      this.balls = this.player.balls;
       this.level = new _level__WEBPACK_IMPORTED_MODULE_1__["default"](this.dimensions);
       this.animate();
     }
   }, {
     key: "registerEvents",
     value: function registerEvents() {
-      console.log('registerEvents');
+      // console.log('registerEvents')
       this.boundKeyStrokeHandler = this.keyStroke.bind(this);
       document.addEventListener("keydown", this.boundKeyStrokeHandler);
     }
   }, {
     key: "keyStroke",
     value: function keyStroke(e) {
-      console.log('keyStroke');
+      // console.log('keyStroke')
       var keyCode = e.keyCode; // console.log(keyCode);
 
       if (!this.running) this.play();
+      console.log(this.ctx);
 
       switch (keyCode) {
         case 32:
-          // this.player.shootBall()
+          this.player.shootBall(this.ctx);
           break;
 
         case 37:
@@ -199,10 +335,9 @@ var DoodleJump = /*#__PURE__*/function () {
           // console.log('r')
           this.player.movePlayer("right");
           break;
-
-        case 40:
-          this.player.movePlayer("down");
-          break;
+        // case 40:
+        //   this.player.movePlayer("down");
+        //   break;
 
         default:
           // console.log('eslse')
@@ -213,7 +348,7 @@ var DoodleJump = /*#__PURE__*/function () {
   }, {
     key: "gameOver",
     value: function gameOver() {
-      return this.player.outOfBounds();
+      return this.player.outOfBounds() || this.balls.length === 0;
     } //this is the key method of gaming action
     //animate tells the game to advance one bit
     //the bird moves, the level moves
@@ -224,16 +359,16 @@ var DoodleJump = /*#__PURE__*/function () {
     value: function animate() {
       var _this = this;
 
-      console.log('animate'); //first we move and draw the level
-
-      console.log('animate level');
+      // console.log('animate')
+      //first we move and draw the level
+      // console.log('animate level')
       this.level.animate(this.ctx); //then we move and draw the bird
+      // console.log('animate player')
 
-      console.log('animate player');
       this.player.animate(this.ctx); //then we check to see if the game is over and let the player know
 
       if (this.gameOver()) {
-        console.log('game over');
+        // console.log('game over')
         alert(this.score);
         this.restart();
       } // //we see if they have scored a point by passing a platform
@@ -242,31 +377,30 @@ var DoodleJump = /*#__PURE__*/function () {
       this.level.landedPlatform(this.player.bounds(), function () {
         _this.score += 1;
 
-        _this.player.movePlayer("up");
+        _this.player.movePlayer("up"); // console.log(this.score);
 
-        console.log(_this.score);
       });
 
       if (this.level.collidesWith(this.player.bounds())) {
-        console.log("if collidesWith");
+        // console.log("if collidesWith");
         this.player.movePlayer("up");
       } //and draw the score
+      // console.log('draw score')
 
 
-      console.log('draw score');
       this.drawScore(); //if the game is NOT running, we do not animate the next frame
 
       if (this.running) {
-        console.log('if running...requestAnimationFrame'); //This calls this function again, after around 1/60th of a second
-
+        // console.log('if running...requestAnimationFrame')
+        //This calls this function again, after around 1/60th of a second
         requestAnimationFrame(this.animate.bind(this));
       }
     }
   }, {
     key: "drawScore",
     value: function drawScore() {
-      console.log('draw score'); //loc will be the location
-
+      // console.log('draw score')
+      //loc will be the location
       var loc = {
         x: 5 * this.dimensions.width / 6,
         y: this.dimensions.height / 6
@@ -632,7 +766,7 @@ var Level = /*#__PURE__*/function () {
   function Level(dimensions) {
     _classCallCheck(this, Level);
 
-    console.log('level constructor');
+    // console.log('level constructor')
     this.dimensions = dimensions;
     var firstPlatformLocation = [// this.dimensions.height,
     // 10,
@@ -640,10 +774,9 @@ var Level = /*#__PURE__*/function () {
     // this.dimensions.height
     2 * this.dimensions.width / 3, 4 * this.dimensions.height / 5]; //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
 
-    var _int = this.getRandomInt;
-    console.log(firstPlatformLocation);
-    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(3), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(3)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(4), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(4)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(5), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(5)])];
-    console.log('con platforms:', this.platforms);
+    var _int = this.getRandomInt; // console.log(firstPlatformLocation)
+
+    this.platforms = [this.randomPlatform(firstPlatformLocation), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(3), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(3)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(4), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(4)]), this.randomPlatform([firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * _int(5), firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * _int(5)])]; // console.log('con platforms:', this.platforms)
   }
 
   _createClass(Level, [{
@@ -657,12 +790,12 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "randomPlatform",
     value: function randomPlatform(location) {
-      console.log('randomPlatform');
-      console.log('lcoation', location);
-      var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
-      console.log(heightRange);
-      console.log(CONSTANTS.PLATFORM_HEIGHT + location[1]);
-      console.log(location[1]);
+      // console.log('randomPlatform')
+      // console.log('lcoation', location)
+      var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT; // console.log(heightRange)
+      // console.log(CONSTANTS.PLATFORM_HEIGHT + location[1])
+      // console.log(location[1])
+
       var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
 
@@ -685,18 +818,18 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "animate",
     value: function animate(ctx) {
-      console.log('level animate');
-      console.log('drawBackground');
-      this.drawBackground(ctx);
-      console.log("drawPlatforms");
-      this.drawPlatforms(ctx);
-      console.log("movePlatform");
+      // console.log('level animate')
+      // console.log('drawBackground')
+      this.drawBackground(ctx); // console.log("drawPlatforms");
+
+      this.drawPlatforms(ctx); // console.log("movePlatform");
+
       this.movePlatform();
     }
   }, {
     key: "drawBackground",
     value: function drawBackground(ctx) {
-      console.log('this.drawBackground');
+      // console.log('this.drawBackground')
       var background = new Image();
 
       background.onload = function () {
@@ -713,8 +846,8 @@ var Level = /*#__PURE__*/function () {
       this.eachPlatform(function (platform) {
         if (platform.top === player.bottom) {
           if (!platform.landed) {
-            platform.landed = true;
-            console.log('landed');
+            platform.landed = true; // console.log('landed')
+
             callback();
           }
         }
@@ -723,7 +856,7 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "movePlatform",
     value: function movePlatform() {
-      console.log('this.movePlatform');
+      // console.log('this.movePlatform')
       this.eachPlatform(function (platform) {
         platform.top -= CONSTANTS.PLATFORM_SPEED;
         platform.bottom -= CONSTANTS.PLATFORM_SPEED;
@@ -739,7 +872,7 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
-      console.log('this.drawPlatforms');
+      // console.log('this.drawPlatforms');
       this.eachPlatform(function (platform) {
         // console.log(platform)
         // ctx.fillStyle = "#6a0dad";
@@ -752,7 +885,7 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "eachPlatform",
     value: function eachPlatform(callback) {
-      console.log('this.eachPlatform');
+      // console.log('this.eachPlatform');
       this.platforms.forEach(callback.bind(this));
     } //This method shall return true if the bird passed in is currently
     //colliding with any platform.
@@ -761,15 +894,13 @@ var Level = /*#__PURE__*/function () {
     key: "collidesWith",
     value: function collidesWith(player) {
       //this function returns true if the the rectangles overlap
-      console.log('this.collidesWith');
-
+      // console.log('this.collidesWith')
       var _overlap = function _overlap(platform, object) {
-        console.log('_overlap'); //check that they don't overlap in the x axis
-
+        // console.log('_overlap')
+        //check that they don't overlap in the x axis
         var objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
-        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left;
-        console.log(object);
-        console.log(platform);
+        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left; // console.log(object)
+        // console.log(platform)
 
         if (!objLeftOnPlat && !objRightOnPlat) {
           return false; // if (object.bottom < platform.top) return true;
@@ -791,15 +922,15 @@ var Level = /*#__PURE__*/function () {
       this.eachPlatform(function (platform) {
         //check if the bird is overlapping (colliding) with either platform
         if (_overlap(platform, player)) {
-          collision = true;
-          console.log(platform);
-          console.log(collision);
+          collision = true; // console.log(platform)
+          // console.log(collision)
+
           player.movePlayer("up");
         } // _overlap(platform.bottomPlatform, player)
 
-      });
-      console.log('collision:');
-      console.log(collision);
+      }); // console.log('collision:')
+      // console.log(collision)
+
       return collision;
     }
   }]);
@@ -846,6 +977,7 @@ var Player = /*#__PURE__*/function () {
 
     this.y = 760;
     this.vel = 0;
+    this.balls = [];
   }
 
   _createClass(Player, [{
@@ -878,9 +1010,10 @@ var Player = /*#__PURE__*/function () {
         // this.y = max_height;
 
         setInterval(function () {
+          console.log(_this.y);
           _this.y += _this.vel;
           if (_this.y > _this.bounds.top + 100) _this.y = _this.bounds.top + 100;
-        }, 30); // // console.log(this.y)
+        }, 50); // // console.log(this.y)
         // if (this.y === (max_height)) {
         //   this.fall();
         //   while (!this.outOfBounds) this.y += this.vel;
@@ -937,8 +1070,11 @@ var Player = /*#__PURE__*/function () {
     }
   }, {
     key: "shootBall",
-    value: function shootBall() {
-      var ball = new _ball__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    value: function shootBall(ctx) {
+      var ball = this.balls.pop();
+      console.log(ctx);
+      ball.animate(ctx);
+      ball.moveBall(); // setInterval(() => ball.moveBall(), 30);
     }
   }]);
 

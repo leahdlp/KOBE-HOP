@@ -13,7 +13,7 @@ const CONSTANTS = {
 
 export default class Level {
   constructor(dimensions) {
-    console.log('level constructor')
+    // console.log('level constructor')
     this.dimensions = dimensions;
 
     const firstPlatformLocation = [
@@ -28,7 +28,7 @@ export default class Level {
     //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
     const int = this.getRandomInt
 
-    console.log(firstPlatformLocation)
+    // console.log(firstPlatformLocation)
 
     this.platforms = [
       this.randomPlatform(firstPlatformLocation),
@@ -51,7 +51,7 @@ export default class Level {
         ]
       ),
     ];
-    console.log('con platforms:', this.platforms)
+    // console.log('con platforms:', this.platforms)
   }
 
   getRandomInt(max) {
@@ -62,14 +62,14 @@ export default class Level {
   }
 
   randomPlatform(location) {
-    console.log('randomPlatform')
-    console.log('lcoation', location)
+    // console.log('randomPlatform')
+    // console.log('lcoation', location)
     const heightRange =
       Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
 
-      console.log(heightRange)
-      console.log(CONSTANTS.PLATFORM_HEIGHT + location[1])
-      console.log(location[1])
+      // console.log(heightRange)
+      // console.log(CONSTANTS.PLATFORM_HEIGHT + location[1])
+      // console.log(location[1])
     const spaceRange =
       Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
     // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
@@ -98,17 +98,17 @@ export default class Level {
   }
 
   animate(ctx) {
-    console.log('level animate')
-    console.log('drawBackground')
+    // console.log('level animate')
+    // console.log('drawBackground')
     this.drawBackground(ctx)
-    console.log("drawPlatforms");
+    // console.log("drawPlatforms");
     this.drawPlatforms(ctx);
-    console.log("movePlatform");
+    // console.log("movePlatform");
     this.movePlatform();
   }
 
   drawBackground(ctx) {
-      console.log('this.drawBackground')
+      // console.log('this.drawBackground')
       const background = new Image();
       background.onload = function() {
           ctx.drawImage(background, -100, -110)
@@ -124,7 +124,7 @@ export default class Level {
       if (platform.top === player.bottom) {
         if (!platform.landed) {
           platform.landed = true;
-          console.log('landed')
+          // console.log('landed')
           callback();
         }
       }
@@ -132,7 +132,7 @@ export default class Level {
   }
 
   movePlatform() {
-    console.log('this.movePlatform')
+    // console.log('this.movePlatform')
     this.eachPlatform(function (platform) {
       platform.top -= CONSTANTS.PLATFORM_SPEED;
       platform.bottom -= CONSTANTS.PLATFORM_SPEED;
@@ -148,7 +148,7 @@ export default class Level {
   }
 
   drawPlatforms(ctx) {
-    console.log('this.drawPlatforms');
+    // console.log('this.drawPlatforms');
     this.eachPlatform(function (platform) {
       // console.log(platform)
       // ctx.fillStyle = "#6a0dad";
@@ -165,22 +165,22 @@ export default class Level {
   }
 
   eachPlatform(callback) {
-    console.log('this.eachPlatform');
+    // console.log('this.eachPlatform');
     this.platforms.forEach(callback.bind(this));
   }
   //This method shall return true if the bird passed in is currently
   //colliding with any platform.
   collidesWith(player) {
     //this function returns true if the the rectangles overlap
-    console.log('this.collidesWith')
+    // console.log('this.collidesWith')
     const _overlap = (platform, object) => {
-      console.log('_overlap')
+      // console.log('_overlap')
       //check that they don't overlap in the x axis
       const objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
       const objRightOnPlat = object.right <= platform.right && object.right >= platform.left;
 
-      console.log(object)
-      console.log(platform)
+      // console.log(object)
+      // console.log(platform)
       if (!objLeftOnPlat && !objRightOnPlat) {
         return false;
         // if (object.bottom < platform.top) return true;
@@ -201,15 +201,15 @@ export default class Level {
         //check if the bird is overlapping (colliding) with either platform
       if (_overlap(platform, player)) {
         collision = true;
-        console.log(platform)
-        console.log(collision)
+        // console.log(platform)
+        // console.log(collision)
         player.movePlayer("up")
       }
         // _overlap(platform.bottomPlatform, player)
     });
 
-    console.log('collision:')
-    console.log(collision)
+    // console.log('collision:')
+    // console.log(collision)
     return collision;
   }
 }

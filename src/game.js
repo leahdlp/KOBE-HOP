@@ -1,5 +1,6 @@
 import Player from "./player";
 import Level from "./level";
+import Ball from "./ball";
 
 export default class DoodleJump {
   constructor(canvas) {
@@ -8,17 +9,27 @@ export default class DoodleJump {
     // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
 
-    this.balls = [];
-    this.hoops = [];
-    this.defenders = [];
+    this.balls;
+    // this.balls = this.player.balls;
+    // this.hoops = [];
+    // this.defenders = [];
 
     this.registerEvents();
     this.restart();
-    console.log('constructor')
+    // console.log('constructor')
+  }
+
+  gameBalls() {
+    console.log('gameBalls')
+    for (let i = 0; i < 3; i++) {
+      this.player.balls.push(new Ball({ x: this.player.x, y: this.player.y }));
+    }
+
+    console.log(this.player.balls)
   }
 
   play() {
-    console.log('play')
+    // console.log('play')
     this.running = true;
 
     // setInterval(() => this.keyStroke({ keyCode: 38 }), 1000)
@@ -26,30 +37,34 @@ export default class DoodleJump {
   }
 
   restart() {
-    console.log('restart')
+    // console.log('restart')
     this.running = false;
     this.score = 0;
     this.player = new Player(this.dimensions);
+    this.gameBalls();
+    this.balls = this.player.balls;
     this.level = new Level(this.dimensions);
 
     this.animate();
   }
 
   registerEvents() {
-    console.log('registerEvents')
+    // console.log('registerEvents')
     this.boundKeyStrokeHandler = this.keyStroke.bind(this);
     document.addEventListener("keydown", this.boundKeyStrokeHandler);
   }
 
   keyStroke(e) {
-    console.log('keyStroke')
+    // console.log('keyStroke')
     let keyCode = e.keyCode;
     // console.log(keyCode);
     if (!this.running) this.play();
 
+    console.log(this.ctx)
+
     switch (keyCode) {
       case 32:
-        // this.player.shootBall()
+        this.player.shootBall(this.ctx)
         break;
       case 37:
         // console.log('l')
@@ -62,9 +77,9 @@ export default class DoodleJump {
         // console.log('r')
         this.player.movePlayer("right")
         break;
-      case 40:
-        this.player.movePlayer("down");
-        break;
+      // case 40:
+      //   this.player.movePlayer("down");
+      //   break;
       default:
         // console.log('eslse')
         break;
@@ -75,7 +90,7 @@ export default class DoodleJump {
 
   gameOver() {
     return (
-      this.player.outOfBounds()
+      this.player.outOfBounds() || this.balls.length === 0
     );
   }
 
@@ -84,16 +99,16 @@ export default class DoodleJump {
   //the bird moves, the level moves
   //everything is redrawn to the screen
   animate() {
-    console.log('animate')
+    // console.log('animate')
     //first we move and draw the level
-    console.log('animate level')
+    // console.log('animate level')
     this.level.animate(this.ctx);
     //then we move and draw the bird
-    console.log('animate player')
+    // console.log('animate player')
     this.player.animate(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
-      console.log('game over')
+      // console.log('game over')
       alert(this.score);
       this.restart();
     }
@@ -102,28 +117,28 @@ export default class DoodleJump {
     this.level.landedPlatform(this.player.bounds(), () => {
       this.score += 1;
       this.player.movePlayer("up");
-      console.log(this.score);
+      // console.log(this.score);
     });
 
     if (this.level.collidesWith(this.player.bounds())) {
-      console.log("if collidesWith");
+      // console.log("if collidesWith");
       this.player.movePlayer("up");
     }
 
     //and draw the score
-    console.log('draw score')
+    // console.log('draw score')
     this.drawScore();
 
     //if the game is NOT running, we do not animate the next frame
     if (this.running) {
-      console.log('if running...requestAnimationFrame')
+      // console.log('if running...requestAnimationFrame')
       //This calls this function again, after around 1/60th of a second
       requestAnimationFrame(this.animate.bind(this));
     }
   }
 
   drawScore() {
-    console.log('draw score')
+    // console.log('draw score')
     //loc will be the location
     const loc = { x: ( 5 * this.dimensions.width) / 6, y: this.dimensions.height / 6 };
     this.ctx.font = "bold 50pt serif";

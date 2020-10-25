@@ -16,6 +16,8 @@ class Player {
     // this.y = this.dimensions.height / 2;
     this.y = 760;
     this.vel = 0;
+
+    this.balls = [];
   }
 
   fall() {
@@ -41,10 +43,11 @@ class Player {
       // let max_height = this.y + this.vel
       // this.y = max_height;
       setInterval(() => {
+        console.log(this.y)
         this.y += this.vel
         
         if (this.y > (this.bounds.top + 100)) this.y = this.bounds.top + 100
-      }, 30);
+      }, 50);
       // // console.log(this.y)
       // if (this.y === (max_height)) {
       //   this.fall();
@@ -99,9 +102,13 @@ class Player {
     return belowTheBottom;
   }
 
-  shootBall() {
-    const ball = new Ball()
+  shootBall(ctx) {
+    const ball = this.balls.pop()
+    console.log(ctx);
+    ball.animate(ctx);
 
+    ball.moveBall()
+    // setInterval(() => ball.moveBall(), 30);
   }
 }
 
