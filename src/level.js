@@ -23,34 +23,44 @@ export default class Level {
         // this.dimensions.height
         
         (2 * this.dimensions.width) / 3,
-        (4 * this.dimensions.height) / 5
+        (5 * this.dimensions.height) / 5
     ]
     //   CONSTANTS.WARM_UP_SECONDS * 60 * CONSTANTS.PLATFORM_SPEED;
     const int = this.getRandomInt
 
     // console.log(firstPlatformLocation)
+    // setInterval(() => this.hoop.place_random_hoop, 20000)
+    // this.hoops = [
+      // this.randomHoop(),
+      // this.randomHoop(),
+      // this.randomHoop()
+    // ];
 
-    this.platforms = [
-      this.randomPlatform(firstPlatformLocation),
-      this.randomPlatform(
-        [
-          firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(3),
-          firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(3)
-        ]
-      ),
-      this.randomPlatform(
-        [
-          firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(4),
-          firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(4)
-        ]
-      ),
-      this.randomPlatform(
-        [
-          firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(5),
-          firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(5)
-        ]
-      ),
-    ];
+    // this.platforms = [
+    //   this.randomPlatform(firstPlatformLocation),
+    //   this.randomPlatform(
+    //     [
+    //       firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(3),
+    //       firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(3)
+    //     ]
+    //   ),
+    //   this.randomPlatform(
+    //     [
+    //       firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(4),
+    //       firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(4)
+    //     ]
+    //   ),
+    //   this.randomPlatform(
+    //     [
+    //       firstPlatformLocation[0] - CONSTANTS.PLATFORM_SPACING[0] * int(5),
+    //       firstPlatformLocation[1] - CONSTANTS.PLATFORM_SPACING[1] * int(5)
+    //     ]
+    //   ),
+    // ];
+
+    this.platforms = [this.randomPlatform(firstPlatformLocation)]
+    this.fillPlatforms(firstPlatformLocation)
+
     // console.log('con platforms:', this.platforms)
   }
 
@@ -59,6 +69,19 @@ export default class Level {
 
     if (int === 0) return 1;
     return int;
+  }
+
+  fillPlatforms(location) {
+    const int = this.getRandomInt;
+
+    for (let i = 0; i < 10; i++) {
+      this.platforms.push(
+        this.randomPlatform([
+          location[0] - CONSTANTS.PLATFORM_SPACING[0] * int(i),
+          location[1] - CONSTANTS.PLATFORM_SPACING[1] * int(i),
+        ])
+      );
+    }
   }
 
   randomPlatform(location) {
@@ -74,11 +97,16 @@ export default class Level {
       Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
     // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
     // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
+    const left = (location[0] + spaceRange) % this.dimensions.width;
+    const right = (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
+    const top = (location[1] + heightRange) % this.dimensions.height;
+    const bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
+
     const platform = {
-        left: (location[0] + spaceRange) % this.dimensions.width,
-        right: (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width,
-        top: (location[1] + heightRange) % this.dimensions.height,
-        bottom: (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height,
+        left: left,
+        right: right,
+        top: top,
+        bottom: bottom,
         landed: false,
     };
 
@@ -100,9 +128,10 @@ export default class Level {
   animate(ctx) {
     // console.log('level animate')
     // console.log('drawBackground')
-    this.drawBackground(ctx)
+    this.drawBackground(ctx);
     // console.log("drawPlatforms");
     this.drawPlatforms(ctx);
+    setInterval(() => this.drawHoop(ctx), 10000)
     // console.log("movePlatform");
     this.movePlatform();
   }
@@ -160,7 +189,7 @@ export default class Level {
     this.eachPlatform(function (platform) {
       // console.log(platform)
       // ctx.fillStyle = "#6a0dad";
-      ctx.fillStyle = "green"
+      ctx.fillStyle = "purple"
       // console.log(ctx)
       //draw platform
       ctx.fillRect(

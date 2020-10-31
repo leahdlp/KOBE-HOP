@@ -8,11 +8,12 @@ const CONSTANTS = {
 };
 
 export default class MovingObject {
-  constructor(dimensions) {
+  constructor(dimensions, coords) {
     this.dimensions = dimensions;
-    this.x = this.dimensions.width / 3;
+    this.coords = coords;
+    // this.x = this.dimensions.width / 3;
     // this.y = this.dimensions.height / 2;
-    this.y = 760;
+    // this.y = 760;
     this.vel = 0;
 
     this.balls = [];
@@ -40,8 +41,9 @@ export default class MovingObject {
         console.log(this.y);
         this.y += this.vel;
 
-        if (this.y > this.bounds.top + 100) this.y = this.bounds.top + 100;
+        if (this.y > (this.bounds.top + 100)) this.y = this.bounds.top + 100;
       }, 50);
+      
       // // console.log(this.y)
       // if (this.y === (max_height)) {
       //   this.fall();
@@ -74,15 +76,20 @@ export default class MovingObject {
     this.draw(ctx);
   }
 
-  draw(ctx) {
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(
-      this.x,
-      this.y,
-      CONSTANTS.PLAYER_WIDTH,
-      CONSTANTS.PLAYER_HEIGHT
-    );
-  }
+    draw(ctx, dimensions, sprite) {
+        if (!sprite) {
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(
+            this.x,
+            this.y,
+            CONSTANTS.PLAYER_WIDTH,
+            CONSTANTS.PLAYER_HEIGHT
+            );
+        } else {
+
+        }
+
+    }
 
   bounds() {
     return {

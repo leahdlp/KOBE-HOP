@@ -6,18 +6,18 @@ const CONSTANTS = {
   JUMP_SPEED: 100,
   FALL_SPEED: 1,
   TERMINAL_VEL: 7.5,
-  PLAYER_WIDTH: 40,
-  PLAYER_HEIGHT: 40,
+  PLAYER_WIDTH: 55,
+  PLAYER_HEIGHT: 85,
 };
 
 class Player extends MovingObject {
   constructor(dimensions) {
     super(dimensions)
-    
+
     // this.dimensions = dimensions;
     this.x = this.dimensions.width / 3;
     // this.y = this.dimensions.height / 2;
-    this.y = 760;
+    this.y = 715;
     this.vel = 0;
 
     this.balls = [];
@@ -36,6 +36,8 @@ class Player extends MovingObject {
   }
   
   movePlayer(dir="") {
+    console.log('moving player')
+
     if (dir === "right") {
       this.x += 25
     } else if (dir === "left") {
@@ -76,16 +78,90 @@ class Player extends MovingObject {
         this.vel = CONSTANTS.TERMINAL_VEL * -1;
       }
     }
+
+    console.log('done moving.')
   }
 
   animate(ctx) {
+    ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    // ctx.clearRect(
+    //   this.bounds().left,
+    //   this.bounds().top,
+    //   this.bounds().right,
+    //   this.bounds().bottom
+    // );
     this.movePlayer();
     this.drawPlayer(ctx);
   }
 
   drawPlayer(ctx) {
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    console.log('drawning player...')
+    // const kobe = new Image();
+    
+    // kobe.onload = function() {
+    //   ctx.drawImage(kobe, this.y, this.x, 100, 100)
+    // }
+
+    // kobe.src =
+    //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
+    // ctx.fillStyle = "yellow";
+    // ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+
+        console.log("begin to clear...");
+        ctx.clearRect(
+          this.x,
+          this.y,
+          CONSTANTS.PLAYER_WIDTH,
+          CONSTANTS.PLAYER_HEIGHT
+        );
+        console.log("ending clear");
+
+    const _draw = () => {
+      console.log('start draw function...')
+      const sprite = new Image();
+      
+      // Define the size of a frame
+      let frameWidth = 55;
+      let frameHeight = 85;
+      
+      // Rows and columns start from 0
+      let row = 3.9;
+      let column = 7.65;
+      // console.log(`${this.x}, ${this.y}`)
+      const x = this.x;
+      const y = this.y;
+      
+      sprite.onload = function() {
+        ctx.drawImage(sprite, 
+          column*frameWidth, 
+          row*frameHeight, 
+          // this.x,
+          // this.y,
+          frameWidth, 
+          frameHeight, 
+          // this.x, 
+          // this.y,
+          x, 
+          y,
+          // this.y, 
+          // this.x,
+          // 500, 760, 
+          // this.x,
+          // this.y)
+          frameWidth, 
+          frameHeight);
+        }
+  
+      // ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+      // sprite.src = image_url("assets/images/basketball-player-sprite-clipart.png");
+      sprite.src = "https://library.kissclipart.com/20180914/rrw/kissclipart-basketball-player-sprite-clipart-nba-basketball-pl-cf84a83dd372375e.png";
+  
+      // sprite.setAttribute("style", "background-color: transparent")
+      console.log('done with draw function.')
+    }
+
+    _draw()
+      console.log('done drawing.')
   }
 
   bounds() {
@@ -107,11 +183,11 @@ class Player extends MovingObject {
 
   shootBall(ctx) {
     const ball = this.balls.pop()
-    console.log(ctx);
+    // console.log(ctx);
+
     ball.animate(ctx);
 
-    ball.moveBall()
-    // setInterval(() => ball.moveBall(), 30);
+    // ball.moveBall()
   }
 }
 

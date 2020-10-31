@@ -11,7 +11,9 @@ export default class Ball {
     this.x = coor.x;
     this.y = coor.y;
 
-    this.balls = []; 
+    this.vel = 0;
+
+    this.balls = [];
 
     this.drawBall = this.drawBall.bind(this);
     this.up = this.up.bind(this);
@@ -21,8 +23,7 @@ export default class Ball {
   }
 
   drawBall(ctx) {
-
-    console.log('draw')
+    console.log("draw");
     console.log(ctx);
     ctx.beginPath();
     ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
@@ -34,33 +35,40 @@ export default class Ball {
   }
 
   up() {
-      this.vel = -1 * CONSTANTS.dy;
+    this.vel = -1 * CONSTANTS.dy;
   }
 
   moveBall() {
-    console.log('move ball')
-    
+    console.log("move ball");
+
     this.up();
-    setInterval(() => this.y += this.vel, 30);
+    setInterval(() => {
+      console.log("setInterval");
+      console.log(`${this.y}, ${this.vel}`)
+      this.y += this.vel;
+      console.log(this.y)
+    }, 30);
+    console.log(`${this.x}, ${this.y}`);
 
     this.vel += CONSTANTS.GRAVITY;
     //we set a 'terminal velocity', a maximum speed the Player can travel
     //this keeps the game from becoming too wild because the Player is moving too fast to control
     if (Math.abs(this.vel) > CONSTANTS.TERMINAL_VEL) {
-        //if the terminal velocity is exceeded, we set it to the terminal velicty
-        if (this.vel > 0) {
+      //if the terminal velocity is exceeded, we set it to the terminal velicty
+      if (this.vel > 0) {
         this.vel = CONSTANTS.TERMINAL_VEL;
-        } else {
+      } else {
         this.vel = CONSTANTS.TERMINAL_VEL * -1;
-        }
+      }
     }
   }
 
   animate(ctx) {
-      console.log('animate')
-      console.log(ctx);
-    this.moveBall()
-    this.drawBall(ctx)
+    console.log("animate");
+    console.log(`x: ${this.x}, y: ${this.y}`)
+    // console.log(ctx);
+    this.moveBall();
+    this.drawBall(ctx);
   }
 
   collidesWith(defender) {
@@ -94,16 +102,25 @@ export default class Ball {
     let collision = false;
     this.eachBall((ball) => {
       //check if the bird is overlapping (colliding) with either ball
-        if (_overlap(this.ball, defender)) {
+      if (_overlap(this.ball, defender)) {
         collision = true;
         console.log(ball);
         console.log(collision);
-        }
+      }
       // _overlap(ball.bottomball, defender)
     });
 
     console.log("collision:");
     console.log(collision);
     return collision;
+  }
+
+  bounds() {
+    return {
+      left: this.x,
+      right: this.x + CONSTANTS.PLAYER_WIDTH,
+      top: this.y,
+      bottom: this.y + CONSTANTS.PLAYER_HEIGHT,
+    };
   }
 }

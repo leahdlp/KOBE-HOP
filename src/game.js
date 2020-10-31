@@ -5,6 +5,7 @@ import Ball from "./ball";
 export default class DoodleJump {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
+    console.log(this.ctx)
     // this.backgrnd = canvas2.getContext("2d");
     this.dimensions = { width: canvas.width, height: canvas.height };
     // console.log((2/3) * canvas.width)
@@ -29,6 +30,51 @@ export default class DoodleJump {
     console.log(this.player.balls)
   }
 
+  displayBallReserve(ctx) {
+    // ctx.clearRect(0, 0, 500, 100);
+    const num = this.player.balls.length;
+    console.log(num);
+    console.log('DISPLAYING BALLS')
+
+    for (let i = 0; i < num; i++) {
+      // console.log(i);
+      let x_coor = (i * 40) + 10;
+      // if (i === 0) x_coor = 10
+      this.drawBallReserve(x_coor, 10, ctx);
+    }
+  }
+
+  drawBallReserve(x, y, ctx) {
+    // if (!this.ctx) return null;
+    const sprite = new Image();
+    console.log(`${x}, ${y}`)
+
+    sprite.onload = function() {
+        ctx.drawImage(sprite,
+            -10, 
+            -10, 
+            // this.x,
+            // this.y,
+            // frameWidth, 
+            // frameHeight,
+            300, 300, 
+            // this.x, 
+            // this.y,
+            x, 
+            y,
+            // this.y, 
+            // this.x,
+            // 500, 760, 
+            // this.x,
+            // this.y)
+            50, 50
+            );
+    }
+
+    sprite.src =
+      "https://www.freepngimg.com/thumb/basketball/10-basketball-ball-png-image-thumb.png";
+  }
+
   play() {
     // console.log('play')
     this.running = true;
@@ -46,7 +92,8 @@ export default class DoodleJump {
     this.balls = this.player.balls;
     this.level = new Level(this.dimensions);
 
-    this.animate();
+    // window.setTimeout(() => this.animate(), 4000);
+    this.animate()
   }
 
   registerEvents() {
@@ -61,7 +108,7 @@ export default class DoodleJump {
     // console.log(keyCode);
     if (!this.running) this.play();
 
-    console.log(this.ctx)
+    console.log(keyCode)
 
     switch (keyCode) {
       case 32:
@@ -77,6 +124,9 @@ export default class DoodleJump {
       case 39:
         // console.log('r')
         this.player.movePlayer("right")
+        break;
+      case 13: 
+        this.restart();
         break;
       // case 40:
       //   this.player.movePlayer("down");
@@ -103,13 +153,11 @@ export default class DoodleJump {
     // console.log('animate')
     //first we move and draw the level
     // console.log('animate level')
-    window.setTimeout(() => {
-      this.level.animate(this.ctx);
-      this.player.animate(this.ctx);
-      this.drawScore();
-    }, 5000)
+    this.level.animate(this.ctx);
     //then we move and draw the bird
     // console.log('animate player')
+    this.player.animate(this.ctx);
+    this.displayBallReserve(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
       // console.log('game over')
@@ -131,7 +179,7 @@ export default class DoodleJump {
 
     //and draw the score
     // console.log('draw score')
-    // this.drawScore();
+    this.drawScore();
 
     //if the game is NOT running, we do not animate the next frame
     if (this.running) {
@@ -144,7 +192,7 @@ export default class DoodleJump {
   drawScore() {
     // console.log('draw score')
     //loc will be the location
-    const loc = { x: ( 5 * this.dimensions.width) / 6, y: this.dimensions.height / 6 };
+    const loc = { x: (5.25 * this.dimensions.width) / 6, y: (0.5 * this.dimensions.height) / 6 };
     this.ctx.font = "bold 50pt serif";
     this.ctx.fillStyle = "white";
     this.ctx.fillText(this.score, loc.x, loc.y);
