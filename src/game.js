@@ -41,6 +41,7 @@ export default class DoodleJump {
       let x_coor = (i * 40) + 10;
       // if (i === 0) x_coor = 10
       this.drawBallReserve(x_coor, 10, ctx);
+      console.log('why?')
     }
   }
 
