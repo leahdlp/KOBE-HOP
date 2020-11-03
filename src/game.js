@@ -3,11 +3,12 @@ import Level from "./level";
 import Ball from "./ball";
 
 export default class DoodleJump {
-  constructor(canvas) {
-    this.ctx = canvas.getContext("2d");
-    console.log(this.ctx)
+  constructor(ctx, dimensions) {
+    // this.ctx = canvas.getContext("2d");
+    // console.log(this./ctx)
+    this.ctx = ctx;
     // this.backgrnd = canvas2.getContext("2d");
-    this.dimensions = { width: canvas.width, height: canvas.height };
+    this.dimensions = dimensions;
     // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
 
@@ -41,7 +42,7 @@ export default class DoodleJump {
       let x_coor = (i * 40) + 10;
       // if (i === 0) x_coor = 10
       this.drawBallReserve(x_coor, 10, ctx);
-      console.log('why?')
+      // console.log('why?')
     }
   }
 
@@ -151,6 +152,7 @@ export default class DoodleJump {
   //the bird moves, the level moves
   //everything is redrawn to the screen
   animate() {
+    this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
     // console.log('animate')
     //first we move and draw the level
     // console.log('animate level')

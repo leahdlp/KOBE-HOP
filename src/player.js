@@ -83,7 +83,7 @@ class Player extends MovingObject {
   }
 
   animate(ctx) {
-    ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    // ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
     // ctx.clearRect(
     //   this.bounds().left,
     //   this.bounds().top,
@@ -107,14 +107,14 @@ class Player extends MovingObject {
     // ctx.fillStyle = "yellow";
     // ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
 
-        console.log("begin to clear...");
-        ctx.clearRect(
-          this.x,
-          this.y,
-          CONSTANTS.PLAYER_WIDTH,
-          CONSTANTS.PLAYER_HEIGHT
-        );
-        console.log("ending clear");
+        // console.log("begin to clear...");
+        // ctx.clearRect(
+        //   this.x,
+        //   this.y,
+        //   CONSTANTS.PLAYER_WIDTH,
+        //   CONSTANTS.PLAYER_HEIGHT
+        // );
+        // console.log("ending clear");
 
     const _draw = () => {
       console.log('start draw function...')

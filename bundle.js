@@ -265,16 +265,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 var DoodleJump = /*#__PURE__*/function () {
-  function DoodleJump(canvas) {
+  function DoodleJump(ctx, dimensions) {
     _classCallCheck(this, DoodleJump);
 
-    this.ctx = canvas.getContext("2d");
-    console.log(this.ctx); // this.backgrnd = canvas2.getContext("2d");
+    // this.ctx = canvas.getContext("2d");
+    // console.log(this./ctx)
+    this.ctx = ctx; // this.backgrnd = canvas2.getContext("2d");
 
-    this.dimensions = {
-      width: canvas.width,
-      height: canvas.height
-    }; // console.log((2/3) * canvas.width)
+    this.dimensions = dimensions; // console.log((2/3) * canvas.width)
     // console.log((4/5) * canvas.height)
 
     this.balls; // this.balls = this.player.balls;
@@ -311,8 +309,7 @@ var DoodleJump = /*#__PURE__*/function () {
         // console.log(i);
         var x_coor = i * 40 + 10; // if (i === 0) x_coor = 10
 
-        this.drawBallReserve(x_coor, 10, ctx);
-        console.log('why?');
+        this.drawBallReserve(x_coor, 10, ctx); // console.log('why?')
       }
     }
   }, {
@@ -422,9 +419,10 @@ var DoodleJump = /*#__PURE__*/function () {
     value: function animate() {
       var _this = this;
 
-      // console.log('animate')
+      this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height); // console.log('animate')
       //first we move and draw the level
       // console.log('animate level')
+
       this.level.animate(this.ctx); //then we move and draw the bird
       // console.log('animate player')
 
@@ -498,12 +496,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./src/game.js");
 
 document.addEventListener("DOMContentLoaded", function () {
-  var game_canv = document.getElementById("game-canvas"); // const bg_canv = document.getElementById("bg-canvas");
+  var canvas = document.getElementById("game-canvas");
+  var ctx = canvas.getContext("2d");
+  var dimensions = {
+    width: canvas.width,
+    height: canvas.height
+  }; // const bg_canv = document.getElementById("bg-canvas");
   // canvasEl.width = Game.DIM_X;
-  // canvasEl.height = Game.DIM_Y;
-  // const ctx = canvasEle.getContext("2d");
 
-  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](game_canv); // new GameView(game, ctx).start();
+  ctx.clearRect(0, 0, dimensions.width, dimensions.height); // canvasEl.height = Game.DIM_Y;
+
+  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, dimensions); // const ctx = canvasEle.getContext("2d");
+  // new GameView(game, ctx).start();
   // console.log(canvasEle)
   // console.log(
   // 'webapck is working'
@@ -530,7 +534,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var CONSTANTS = {
-  //   PLATFORM_SPEED: 2,
+  PLATFORM_SPEED: 1,
   GAP_HEIGHT: 125,
   GAP_WIDTH: 60,
   PLATFORM_HEIGHT: 20,
@@ -582,7 +586,8 @@ var Level = /*#__PURE__*/function () {
     // ];
 
     this.platforms = [this.randomPlatform(firstPlatformLocation)];
-    this.fillPlatforms(firstPlatformLocation); // console.log('con platforms:', this.platforms)
+    this.fillPlatforms(firstPlatformLocation);
+    console.log('con platforms:', this.platforms);
   }
 
   _createClass(Level, [{
@@ -607,10 +612,7 @@ var Level = /*#__PURE__*/function () {
     value: function randomPlatform(location) {
       // console.log('randomPlatform')
       // console.log('lcoation', location)
-      var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT; // console.log(heightRange)
-      // console.log(CONSTANTS.PLATFORM_HEIGHT + location[1])
-      // console.log(location[1])
-
+      var heightRange = Math.floor(this.dimensions.height) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_HEIGHT;
       var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
 
@@ -618,19 +620,22 @@ var Level = /*#__PURE__*/function () {
       var right = (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
       var top = (location[1] + heightRange) % this.dimensions.height;
       var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
+      console.log("left: ".concat(left, ", right: ").concat(right, ", top: ").concat(top, ", bottom: ").concat(bottom));
       var platform = {
         left: left,
         right: right,
         top: top,
         bottom: bottom,
         landed: false
-      }; // console.log(location[0] + CONSTANTS.PLATFORM_WIDTH)
+      }; // debugger
+      // console.log(location[0] + CONSTANTS.PLATFORM_WIDTH)
       // console.log(CONSTANTS.PLATFORM_WIDTH + location[0]);
       // console.log(CONSTANTS.PLATFORM_HEIGHT)
       // console.log('left', platform.left)
       // console.log('right', platform.right);
-      // console.log('top', platform.top);
-      // console.log('bottom', platform.bottom);
+
+      console.log('top', platform.top);
+      console.log('bottom', platform.bottom); // console.log(platform)
 
       return platform;
     }
@@ -685,16 +690,22 @@ var Level = /*#__PURE__*/function () {
     value: function movePlatform() {
       // console.log('this.movePlatform')
       this.eachPlatform(function (platform) {
-        platform.top -= CONSTANTS.PLATFORM_SPEED;
-        platform.bottom -= CONSTANTS.PLATFORM_SPEED;
+        platform.top += CONSTANTS.PLATFORM_SPEED;
+        platform.bottom += CONSTANTS.PLATFORM_SPEED;
       }); //if a platform has left the screen add a new one to the end
 
-      if (this.platforms[0].top <= 0) {
+      console.log("PLATFORM GONE?: ".concat(this.platforms[0].top >= 0));
+      console.log(this.platforms[0].top);
+      console.log(this.platforms[0].top >= 0);
+
+      if (this.platforms[0].top >= this.dimensions.height) {
         this.platforms.shift();
-        var newX = this.platformss[1].left + CONSTANTS.PLATFORM_SPACING;
-        var newY = this.platforms[1].top + CONSTANTS.PLATFORM_SPACING;
+        var newX = this.platforms[0].left + CONSTANTS.PLATFORM_SPACING;
+        var newY = this.platforms[0].top + CONSTANTS.PLATFORM_SPACING;
         this.platforms.push(this.randomPlatform([newX, newY]));
       }
+
+      console.log(this.platforms);
     }
   }, {
     key: "drawPlatforms",
@@ -1030,13 +1041,13 @@ var Player = /*#__PURE__*/function (_MovingObject) {
   }, {
     key: "animate",
     value: function animate(ctx) {
-      ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT); // ctx.clearRect(
+      // ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+      // ctx.clearRect(
       //   this.bounds().left,
       //   this.bounds().top,
       //   this.bounds().right,
       //   this.bounds().bottom
       // );
-
       this.movePlayer();
       this.drawPlayer(ctx);
     }
@@ -1053,10 +1064,14 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
       // ctx.fillStyle = "yellow";
       // ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
-
-      console.log("begin to clear...");
-      ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
-      console.log("ending clear");
+      // console.log("begin to clear...");
+      // ctx.clearRect(
+      //   this.x,
+      //   this.y,
+      //   CONSTANTS.PLAYER_WIDTH,
+      //   CONSTANTS.PLAYER_HEIGHT
+      // );
+      // console.log("ending clear");
 
       var _draw = function _draw() {
         console.log('start draw function...');
