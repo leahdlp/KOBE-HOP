@@ -615,10 +615,11 @@ var Level = /*#__PURE__*/function () {
       var spaceRange = Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH; // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
       // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
 
-      var left = (location[0] + spaceRange) % this.dimensions.width;
-      var right = (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
+      var left = Math.abs(location[0] + spaceRange) % this.dimensions.width;
+      var right = Math.abs(CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
       var top = (location[1] + heightRange) % this.dimensions.height;
-      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height; // console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
+      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
+      console.log("left: ".concat(left, ", right: ").concat(right, ", top: ").concat(top, ", bottom: ").concat(bottom)); // debugger
 
       var platform = {
         left: left,
@@ -641,8 +642,9 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "animate",
     value: function animate(ctx) {
-      // console.log('level animate')
+      console.log('level animate'); // console.log('level animate')
       // console.log('drawBackground')
+
       this.drawBackground(ctx); // console.log("drawPlatforms");
 
       this.drawPlatforms(ctx); // setInterval(() => this.drawHoop(ctx), 10000)
@@ -683,7 +685,8 @@ var Level = /*#__PURE__*/function () {
   }, {
     key: "movePlatform",
     value: function movePlatform() {
-      // console.log('this.movePlatform')
+      // debugger
+      console.log('this.movePlatform');
       this.eachPlatform(function (platform) {
         platform.top += CONSTANTS.PLATFORM_SPEED;
         platform.bottom += CONSTANTS.PLATFORM_SPEED;
@@ -692,18 +695,28 @@ var Level = /*#__PURE__*/function () {
       // console.log(this.platforms[0].top)
       // console.log(this.platforms[0].top >= 0);
 
+      console.log("first plat top: ".concat(this.platforms[0].top, ", canv bottom: ").concat(this.dimensions.height));
+      console.log("if statement: ".concat(this.platforms[0].top >= this.dimensions.height));
+
       if (this.platforms[0].top >= this.dimensions.height) {
         this.platforms.shift();
-        var newX = this.platforms[0].left + CONSTANTS.PLATFORM_SPACING;
-        var newY = this.platforms[0].top + CONSTANTS.PLATFORM_SPACING;
-        this.platforms.push(this.randomPlatform([newX, newY]));
-      } // console.log(this.platforms)
+        var idx = this.platforms.length - 1;
+        var newX = this.platforms[idx].left + CONSTANTS.PLATFORM_SPACING[0];
+        var newY = this.platforms[idx].top + CONSTANTS.PLATFORM_SPACING[1];
+        console.log("newX: ".concat(newX, ", newY: ").concat(newY)); // console.log()
+        // this.platforms.push(this.randomPlatform([newX, newY]));
 
+        this.platforms.push(this.randomPlatform([newX, newY]));
+      } // debugger
+
+
+      console.log('WE ARE HEREERERERERERER');
+      console.log(this.platforms); // console.log(this.platforms)
     }
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
-      // console.log('this.drawPlatforms');
+      console.log('this.drawPlatforms');
       this.eachPlatform(function (platform) {
         // console.log(platform)
         // ctx.fillStyle = "#6a0dad";

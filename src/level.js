@@ -85,6 +85,7 @@ export default class Level {
   }
 
   randomPlatform(location) {
+
     // console.log('randomPlatform')
     // console.log('lcoation', location)
     const heightRange =
@@ -94,13 +95,13 @@ export default class Level {
       Math.floor(this.dimensions.width) - 2 * CONSTANTS.EDGE_BUFFER - CONSTANTS.GAP_WIDTH;
     // const gapTop = Math.random() * heightRange + CONSTANTS.EDGE_BUFFER;
     // const gapSide = Math.random() * widthRange + CONSTANTS.EDGE_BUFFER;
-    const left = (location[0] + spaceRange) % this.dimensions.width;
-    const right = (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
+    const left = Math.abs(location[0] + spaceRange) % this.dimensions.width;
+    const right = Math.abs(CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
     const top = (location[1] + heightRange) % this.dimensions.height;
     const bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
 
-    // console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
-
+    console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
+    // debugger
     const platform = {
         left: left,
         right: right,
@@ -126,6 +127,7 @@ export default class Level {
   }
 
   animate(ctx) {
+    console.log('level animate')
     // console.log('level animate')
     // console.log('drawBackground')
     this.drawBackground(ctx);
@@ -169,7 +171,8 @@ export default class Level {
   }
 
   movePlatform() {
-    // console.log('this.movePlatform')
+    // debugger
+    console.log('this.movePlatform')
     this.eachPlatform(function (platform) {
       platform.top += CONSTANTS.PLATFORM_SPEED;
       platform.bottom += CONSTANTS.PLATFORM_SPEED;
@@ -179,18 +182,29 @@ export default class Level {
     // console.log(`PLATFORM GONE?: ${this.platforms[0].top >= 0}`);
     // console.log(this.platforms[0].top)
     // console.log(this.platforms[0].top >= 0);
-    if (this.platforms[0].top >= this.dimensions.height) {
-      this.platforms.shift();
-      const newX = this.platforms[0].left + CONSTANTS.PLATFORM_SPACING;
-      const newY = this.platforms[0].top + CONSTANTS.PLATFORM_SPACING;
-      this.platforms.push(this.randomPlatform([newX, newY]));
+    console.log(`first plat top: ${this.platforms[0].top}, canv bottom: ${this.dimensions.height}`)
+    console.log(
+      `if statement: ${this.platforms[0].top >= this.dimensions.height}`
+      );
+      if (this.platforms[0].top >= this.dimensions.height) {
+        this.platforms.shift();
+        const idx = this.platforms.length - 1;
+      const newX = this.platforms[idx].left + CONSTANTS.PLATFORM_SPACING[0];
+      const newY = this.platforms[idx].top + CONSTANTS.PLATFORM_SPACING[1];
+      console.log(`newX: ${newX}, newY: ${newY}`)
+      // console.log()
+      // this.platforms.push(this.randomPlatform([newX, newY]));
+      this.platforms.push(this.randomPlatform([newX, newY]))
     }
+    // debugger
+    console.log('WE ARE HEREERERERERERER')
+    console.log(this.platforms)
 
     // console.log(this.platforms)
   }
 
   drawPlatforms(ctx) {
-    // console.log('this.drawPlatforms');
+    console.log('this.drawPlatforms');
     this.eachPlatform(function (platform) {
       // console.log(platform)
       // ctx.fillStyle = "#6a0dad";
