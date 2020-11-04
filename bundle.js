@@ -586,8 +586,7 @@ var Level = /*#__PURE__*/function () {
     // ];
 
     this.platforms = [this.randomPlatform(firstPlatformLocation)];
-    this.fillPlatforms(firstPlatformLocation);
-    console.log('con platforms:', this.platforms);
+    this.fillPlatforms(firstPlatformLocation); // console.log('con platforms:', this.platforms)
   }
 
   _createClass(Level, [{
@@ -603,7 +602,7 @@ var Level = /*#__PURE__*/function () {
     value: function fillPlatforms(location) {
       var _int3 = this.getRandomInt;
 
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 15; i++) {
         this.platforms.push(this.randomPlatform([location[0] - CONSTANTS.PLATFORM_SPACING[0] * _int3(i), location[1] - CONSTANTS.PLATFORM_SPACING[1] * _int3(i)]));
       }
     }
@@ -619,8 +618,8 @@ var Level = /*#__PURE__*/function () {
       var left = (location[0] + spaceRange) % this.dimensions.width;
       var right = (CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
       var top = (location[1] + heightRange) % this.dimensions.height;
-      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
-      console.log("left: ".concat(left, ", right: ").concat(right, ", top: ").concat(top, ", bottom: ").concat(bottom));
+      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height; // console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
+
       var platform = {
         left: left,
         right: right,
@@ -633,25 +632,21 @@ var Level = /*#__PURE__*/function () {
       // console.log(CONSTANTS.PLATFORM_HEIGHT)
       // console.log('left', platform.left)
       // console.log('right', platform.right);
-
-      console.log('top', platform.top);
-      console.log('bottom', platform.bottom); // console.log(platform)
+      // console.log('top', platform.top);
+      // console.log('bottom', platform.bottom);
+      // console.log(platform)
 
       return platform;
     }
   }, {
     key: "animate",
     value: function animate(ctx) {
-      var _this = this;
-
       // console.log('level animate')
       // console.log('drawBackground')
       this.drawBackground(ctx); // console.log("drawPlatforms");
 
-      this.drawPlatforms(ctx);
-      setInterval(function () {
-        return _this.drawHoop(ctx);
-      }, 10000); // console.log("movePlatform");
+      this.drawPlatforms(ctx); // setInterval(() => this.drawHoop(ctx), 10000)
+      // console.log("movePlatform");
 
       this.movePlatform();
     }
@@ -693,19 +688,17 @@ var Level = /*#__PURE__*/function () {
         platform.top += CONSTANTS.PLATFORM_SPEED;
         platform.bottom += CONSTANTS.PLATFORM_SPEED;
       }); //if a platform has left the screen add a new one to the end
-
-      console.log("PLATFORM GONE?: ".concat(this.platforms[0].top >= 0));
-      console.log(this.platforms[0].top);
-      console.log(this.platforms[0].top >= 0);
+      // console.log(`PLATFORM GONE?: ${this.platforms[0].top >= 0}`);
+      // console.log(this.platforms[0].top)
+      // console.log(this.platforms[0].top >= 0);
 
       if (this.platforms[0].top >= this.dimensions.height) {
         this.platforms.shift();
         var newX = this.platforms[0].left + CONSTANTS.PLATFORM_SPACING;
         var newY = this.platforms[0].top + CONSTANTS.PLATFORM_SPACING;
         this.platforms.push(this.randomPlatform([newX, newY]));
-      }
+      } // console.log(this.platforms)
 
-      console.log(this.platforms);
     }
   }, {
     key: "drawPlatforms",

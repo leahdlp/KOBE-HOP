@@ -61,7 +61,7 @@ export default class Level {
     this.platforms = [this.randomPlatform(firstPlatformLocation)]
     this.fillPlatforms(firstPlatformLocation)
 
-    console.log('con platforms:', this.platforms)
+    // console.log('con platforms:', this.platforms)
   }
 
   getRandomInt(max) {
@@ -74,7 +74,7 @@ export default class Level {
   fillPlatforms(location) {
     const int = this.getRandomInt;
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       this.platforms.push(
         this.randomPlatform([
           location[0] - CONSTANTS.PLATFORM_SPACING[0] * int(i),
@@ -99,7 +99,7 @@ export default class Level {
     const top = (location[1] + heightRange) % this.dimensions.height;
     const bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
 
-    console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
+    // console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
 
     const platform = {
         left: left,
@@ -117,9 +117,9 @@ export default class Level {
     // console.log('left', platform.left)
     // console.log('right', platform.right);
 
-    console.log('top', platform.top);
+    // console.log('top', platform.top);
 
-    console.log('bottom', platform.bottom);
+    // console.log('bottom', platform.bottom);
     // console.log(platform)
 
     return platform;
@@ -131,7 +131,7 @@ export default class Level {
     this.drawBackground(ctx);
     // console.log("drawPlatforms");
     this.drawPlatforms(ctx);
-    setInterval(() => this.drawHoop(ctx), 10000)
+    // setInterval(() => this.drawHoop(ctx), 10000)
     // console.log("movePlatform");
     this.movePlatform();
   }
@@ -176,9 +176,9 @@ export default class Level {
     });
 
     //if a platform has left the screen add a new one to the end
-    console.log(`PLATFORM GONE?: ${this.platforms[0].top >= 0}`);
-    console.log(this.platforms[0].top)
-    console.log(this.platforms[0].top >= 0);
+    // console.log(`PLATFORM GONE?: ${this.platforms[0].top >= 0}`);
+    // console.log(this.platforms[0].top)
+    // console.log(this.platforms[0].top >= 0);
     if (this.platforms[0].top >= this.dimensions.height) {
       this.platforms.shift();
       const newX = this.platforms[0].left + CONSTANTS.PLATFORM_SPACING;
@@ -186,7 +186,7 @@ export default class Level {
       this.platforms.push(this.randomPlatform([newX, newY]));
     }
 
-    console.log(this.platforms)
+    // console.log(this.platforms)
   }
 
   drawPlatforms(ctx) {
