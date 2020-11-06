@@ -350,6 +350,14 @@ var DoodleJump = /*#__PURE__*/function () {
       // console.log('restart')
       this.running = false;
       this.score = 0;
+
+      if (this.player) {
+        this.y = 0;
+        this.x = 0; //   delete this.player.x;
+        //   delete this.player.y;
+        //   delete this.player.vel;
+      }
+
       this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this.dimensions);
       this.gameBalls();
       this.balls = this.player.balls;
@@ -419,12 +427,14 @@ var DoodleJump = /*#__PURE__*/function () {
     value: function animate() {
       var _this = this;
 
+      var start = requestAnimationFrame;
+      var render = this.animate.bind(this);
       this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height); // console.log('animate')
       //first we move and draw the level
       // console.log('animate level')
 
       this.level.animate(this.ctx); //then we move and draw the bird
-      // console.log('animate player')
+      // console.log('animate player')D
 
       this.player.animate(this.ctx);
       this.displayBallReserve(this.ctx); //then we check to see if the game is over and let the player know
@@ -433,6 +443,7 @@ var DoodleJump = /*#__PURE__*/function () {
         // console.log('game over')
         alert(this.score);
         this.restart();
+        cancelAnimationFrame(start(render));
       } // //we see if they have scored a point by passing a platform
 
 
@@ -443,7 +454,7 @@ var DoodleJump = /*#__PURE__*/function () {
 
       });
 
-      if (this.level.collidesWith(this.player.bounds())) {
+      if (this.level.collidesWith(this.player)) {
         // console.log("if collidesWith");
         this.player.movePlayer("up");
       } //and draw the score
@@ -455,7 +466,8 @@ var DoodleJump = /*#__PURE__*/function () {
       if (this.running) {
         // console.log('if running...requestAnimationFrame')
         //This calls this function again, after around 1/60th of a second
-        requestAnimationFrame(this.animate.bind(this));
+        // requestAnimationFrame(this.animate.bind(this));
+        start(render);
       }
     }
   }, {
@@ -602,7 +614,7 @@ var Level = /*#__PURE__*/function () {
     value: function fillPlatforms(location) {
       var _int3 = this.getRandomInt;
 
-      for (var i = 0; i < 15; i++) {
+      for (var i = 0; i < 11; i++) {
         this.platforms.push(this.randomPlatform([location[0] - CONSTANTS.PLATFORM_SPACING[0] * _int3(i), location[1] - CONSTANTS.PLATFORM_SPACING[1] * _int3(i)]));
       }
     }
@@ -618,8 +630,8 @@ var Level = /*#__PURE__*/function () {
       var left = Math.abs(location[0] + spaceRange) % this.dimensions.width;
       var right = Math.abs(CONSTANTS.PLATFORM_WIDTH + location[0] + spaceRange) % this.dimensions.width;
       var top = (location[1] + heightRange) % this.dimensions.height;
-      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height;
-      console.log("left: ".concat(left, ", right: ").concat(right, ", top: ").concat(top, ", bottom: ").concat(bottom)); // debugger
+      var bottom = (CONSTANTS.PLATFORM_HEIGHT + location[1] + heightRange) % this.dimensions.height; // console.log(`left: ${left}, right: ${right}, top: ${top}, bottom: ${bottom}`)
+      // debugger
 
       var platform = {
         left: left,
@@ -686,7 +698,7 @@ var Level = /*#__PURE__*/function () {
     key: "movePlatform",
     value: function movePlatform() {
       // debugger
-      console.log('this.movePlatform');
+      // console.log('this.movePlatform')
       this.eachPlatform(function (platform) {
         platform.top += CONSTANTS.PLATFORM_SPEED;
         platform.bottom += CONSTANTS.PLATFORM_SPEED;
@@ -694,29 +706,30 @@ var Level = /*#__PURE__*/function () {
       // console.log(`PLATFORM GONE?: ${this.platforms[0].top >= 0}`);
       // console.log(this.platforms[0].top)
       // console.log(this.platforms[0].top >= 0);
-
-      console.log("first plat top: ".concat(this.platforms[0].top, ", canv bottom: ").concat(this.dimensions.height));
-      console.log("if statement: ".concat(this.platforms[0].top >= this.dimensions.height));
+      // console.log(`first plat top: ${this.platforms[0].top}, canv bottom: ${this.dimensions.height}`)
+      // console.log(
+      // `if statement: ${this.platforms[0].top >= this.dimensions.height}`
+      // );
 
       if (this.platforms[0].top >= this.dimensions.height) {
         this.platforms.shift();
         var idx = this.platforms.length - 1;
         var newX = this.platforms[idx].left + CONSTANTS.PLATFORM_SPACING[0];
-        var newY = this.platforms[idx].top + CONSTANTS.PLATFORM_SPACING[1];
-        console.log("newX: ".concat(newX, ", newY: ").concat(newY)); // console.log()
+        var newY = this.platforms[idx].top + CONSTANTS.PLATFORM_SPACING[1]; // console.log(`newX: ${newX}, newY: ${newY}`)
+        // console.log()
         // this.platforms.push(this.randomPlatform([newX, newY]));
 
         this.platforms.push(this.randomPlatform([newX, newY]));
       } // debugger
+      // console.log('WE ARE HEREERERERERERER')
+      // console.log(this.platforms)
+      // console.log(this.platforms)
 
-
-      console.log('WE ARE HEREERERERERERER');
-      console.log(this.platforms); // console.log(this.platforms)
     }
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
-      console.log('this.drawPlatforms');
+      // console.log('this.drawPlatforms');
       this.eachPlatform(function (platform) {
         // console.log(platform)
         // ctx.fillStyle = "#6a0dad";
@@ -741,21 +754,46 @@ var Level = /*#__PURE__*/function () {
       // console.log('this.collidesWith')
       var _overlap = function _overlap(platform, object) {
         // console.log('_overlap')
-        //check that they don't overlap in the x axis
+        // check that they don't overlap in the x axis
         var objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
-        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left; // console.log(object)
-        // console.log(platform)
+        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left;
+        var objBotOnPlatTop = Math.abs(platform.top - object.bottom) === 0; // console.log("OBJECT BOTTOM: ", object.bottom/);
+        // console.log("PLATFORM TOP: ", platform.top);
+        // console.log('objectBotOnPlat: ', !objBotOnPlatTop)
+        // console.log('OBJECT RIGHT: ', object.right)
+        // console.log('PLATFORM RIGHT: ', platform.right)
+        // console.log("OBJECT LEFT: ", object.left);
+        // console.log("PLATFORM LEFT: ", platform.left);
+        // console.log('objectLeftOnPlat', !objLeftOnPlat);
+        // console.log('objRightOnPlat', !objRightOnPlat);
 
         if (!objLeftOnPlat && !objRightOnPlat) {
-          return false; // if (object.bottom < platform.top) return true;
+          // if (player.y < 400) { 
+          // debugger
+          // }
+          return false; // if (objBotOnPlatTop) return true;
           // return false;
+        }
+
+        if (objLeftOnPlat || objRightOnPlat) {
+          // debugger
+          console.log('PLATFORM:::::', platform.top);
+          console.log('PLAYER:::::::', object.bottom);
+          console.log('objBotOnPlat:::::::::', objBotOnPlatTop);
+
+          if (objBotOnPlatTop) {
+            debugger;
+          }
         } //check that they don't overlap in the y axis
 
 
         var objTopAbovePlatBot = object.top > platform.bottom;
-        var objBotOnPlatTop = object.bottom === platform.top;
 
         if (!objBotOnPlatTop) {
+          // console.log()
+          // if (player.y < 400) { 
+          // debugger
+          // }
           return false;
         }
 
@@ -765,11 +803,15 @@ var Level = /*#__PURE__*/function () {
       var collision = false;
       this.eachPlatform(function (platform) {
         //check if the bird is overlapping (colliding) with either platform
-        if (_overlap(platform, player)) {
-          collision = true; // console.log(platform)
-          // console.log(collision)
+        if (_overlap(platform, player.bounds())) {
+          console.log('WE ARE HERE IN THE OVERLAP');
+          console.log(platform);
+          collision = true; // debugger
 
-          player.movePlayer("up");
+          console.log(player);
+          player.y = platform.top; // console.log('PLATFORM: ', platform)
+          // console.log(collision)
+          // player.movePlayer("up")
         } // _overlap(platform.bottomPlatform, player)
 
       }); // console.log('collision:')
@@ -1008,18 +1050,26 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       } else if (dir === "left") {
         this.x -= 25;
       } else if (dir === "up") {
-        this.jump(); // console.log(this.y)
-        // let max_height = this.y + this.vel
-        // this.y = max_height;
+        this.jump();
+        this.y += this.vel; // console.log(this.y)
+
+        var max_height = 200; // if (this.y <= max_height) this.y = max_height;
+
+        console.log('THIS.Y ======', this.y); // this.y = max_height;
 
         setInterval(function () {
           console.log(_this2.y);
           _this2.y += _this2.vel;
-          if (_this2.y > _this2.bounds.top + 100) _this2.y = _this2.bounds.top + 100;
+
+          if (_this2.y <= max_height) {
+            _this2.y = max_height;
+            _this2.y -= _this2.vel;
+          }
         }, 50); // // console.log(this.y)
         // if (this.y === (max_height)) {
-        //   this.fall();
-        //   while (!this.outOfBounds) this.y += this.vel;
+        // this.fall();
+        // while (!this.outOfBounds) this.y += this.vel;
+        // }
       } // } else if (dir === "down") {
       // this.fall()
       // setInterval(() => this.y += this.vel, 30);
@@ -1068,9 +1118,9 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       // }
       // kobe.src =
       //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
-      // ctx.fillStyle = "yellow";
-      // ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
-      // console.log("begin to clear...");
+
+      ctx.fillStyle = "yellow";
+      ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT); // console.log("begin to clear...");
       // ctx.clearRect(
       //   this.x,
       //   this.y,
@@ -1107,7 +1157,11 @@ var Player = /*#__PURE__*/function (_MovingObject) {
         // sprite.src = image_url("assets/images/basketball-player-sprite-clipart.png");
 
 
-        sprite.src = "https://library.kissclipart.com/20180914/rrw/kissclipart-basketball-player-sprite-clipart-nba-basketball-pl-cf84a83dd372375e.png"; // sprite.setAttribute("style", "background-color: transparent")
+        sprite.src = "https://library.kissclipart.com/20180914/rrw/kissclipart-basketball-player-sprite-clipart-nba-basketball-pl-cf84a83dd372375e.png"; // console.log('SPRITEEEEEEEEEE')
+        // console.log(sprite);
+        // console.log("SPRITEEEEEEEEEE SOURCEEEEE");
+        // console.log(sprite.src);
+        // sprite.setAttribute("style", "background-color: transparent")
 
         console.log('done with draw function.');
       };

@@ -44,19 +44,26 @@ class Player extends MovingObject {
       this.x -= 25
     } else if (dir === "up") {
       this.jump()
+      this.y += this.vel;
       // console.log(this.y)
-      // let max_height = this.y + this.vel
+      const max_height = 200;
+      // if (this.y <= max_height) this.y = max_height;
+      console.log('THIS.Y ======', this.y)
       // this.y = max_height;
       setInterval(() => {
         console.log(this.y)
         this.y += this.vel
         
-        if (this.y > (this.bounds.top + 100)) this.y = this.bounds.top + 100
+        if (this.y <= max_height) {
+          this.y = max_height;
+          this.y -= this.vel;
+        }
       }, 50);
       // // console.log(this.y)
-      // if (this.y === (max_height)) {
-      //   this.fall();
-      //   while (!this.outOfBounds) this.y += this.vel;
+    // if (this.y === (max_height)) {
+        // this.fall();
+        // while (!this.outOfBounds) this.y += this.vel;
+    // }
     }
     // } else if (dir === "down") {
       // this.fall()
@@ -104,8 +111,8 @@ class Player extends MovingObject {
 
     // kobe.src =
     //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
-    // ctx.fillStyle = "yellow";
-    // ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
 
         // console.log("begin to clear...");
         // ctx.clearRect(
@@ -155,7 +162,10 @@ class Player extends MovingObject {
       // ctx.clearRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
       // sprite.src = image_url("assets/images/basketball-player-sprite-clipart.png");
       sprite.src = "https://library.kissclipart.com/20180914/rrw/kissclipart-basketball-player-sprite-clipart-nba-basketball-pl-cf84a83dd372375e.png";
-  
+      // console.log('SPRITEEEEEEEEEE')
+      // console.log(sprite);
+      // console.log("SPRITEEEEEEEEEE SOURCEEEEE");
+      // console.log(sprite.src);
       // sprite.setAttribute("style", "background-color: transparent")
       console.log('done with draw function.')
     }

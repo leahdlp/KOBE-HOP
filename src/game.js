@@ -89,6 +89,15 @@ export default class DoodleJump {
     // console.log('restart')
     this.running = false;
     this.score = 0;
+
+    if (this.player) {
+      this.y = 0;
+      this.x = 0;
+    //   delete this.player.x;
+    //   delete this.player.y;
+    //   delete this.player.vel;
+    }
+
     this.player = new Player(this.dimensions);
     this.gameBalls();
     this.balls = this.player.balls;
@@ -152,20 +161,25 @@ export default class DoodleJump {
   //the bird moves, the level moves
   //everything is redrawn to the screen
   animate() {
+    const start = requestAnimationFrame;
+    const render = this.animate.bind(this);
+
     this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height)
     // console.log('animate')
     //first we move and draw the level
     // console.log('animate level')
     this.level.animate(this.ctx);
     //then we move and draw the bird
-    // console.log('animate player')
+    // console.log('animate player')D
     this.player.animate(this.ctx);
+
     this.displayBallReserve(this.ctx);
     //then we check to see if the game is over and let the player know
     if (this.gameOver()) {
       // console.log('game over')
       alert(this.score);
       this.restart();
+      cancelAnimationFrame(start(render))
     }
 
     // //we see if they have scored a point by passing a platform
@@ -175,7 +189,7 @@ export default class DoodleJump {
       // console.log(this.score);
     });
 
-    if (this.level.collidesWith(this.player.bounds())) {
+    if (this.level.collidesWith(this.player)) {
       // console.log("if collidesWith");
       this.player.movePlayer("up");
     }
@@ -188,7 +202,8 @@ export default class DoodleJump {
     if (this.running) {
       // console.log('if running...requestAnimationFrame')
       //This calls this function again, after around 1/60th of a second
-      requestAnimationFrame(this.animate.bind(this));
+      // requestAnimationFrame(this.animate.bind(this));
+      start(render)
     }
   }
 
