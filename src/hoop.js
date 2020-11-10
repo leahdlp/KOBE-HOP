@@ -4,9 +4,28 @@ export default class Hoop {
         
     }
 
+    getRandomInt(max) {
+        const int = Math.floor(Math.random() * Math.floor(max));
+
+        if (int === 0) return 1;
+        return int;
+    }
+
     drawHoop(ctx) {
-        ctx.fillStyle = "yellow";
-        ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+        // console.log('DRAWING HOOP')
+        // ctx.fillStyle = "blue";
+        // ctx.fillRect(100, 100, 200, 200);
+        const sprite = new Image();
+
+        const x = this.getRandomInt(this.dimensions.width - 125);
+        const y = 75;
+
+        sprite.onload = function() {
+            ctx.drawImage(sprite, x, y, 125, 125)
+        }
+
+        sprite.src = "https://www.pikpng.com/pngl/m/60-606890_animated-basketball-png-basketball-hoop-clipart-transparent-background.png";
+        sprite.setAttribute("style", "background-color: transparent")
     }
 
 

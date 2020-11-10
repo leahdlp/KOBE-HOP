@@ -254,11 +254,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./level */ "./src/level.js");
 /* harmony import */ var _ball__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ball */ "./src/ball.js");
+/* harmony import */ var _hoop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hoop */ "./src/hoop.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -467,6 +469,10 @@ var DoodleJump = /*#__PURE__*/function () {
         // console.log('if running...requestAnimationFrame')
         //This calls this function again, after around 1/60th of a second
         // requestAnimationFrame(this.animate.bind(this));
+        setInterval(function () {
+          var hoop = new _hoop__WEBPACK_IMPORTED_MODULE_3__["default"](_this.dimensions);
+          hoop.animate(_this.ctx);
+        }, 10000);
         start(render);
       }
     }
@@ -496,6 +502,109 @@ var DoodleJump = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./src/hoop.js":
+/*!*********************!*\
+  !*** ./src/hoop.js ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Hoop; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Hoop = /*#__PURE__*/function () {
+  function Hoop(dimensions) {
+    _classCallCheck(this, Hoop);
+
+    this.dimensions = dimensions;
+  }
+
+  _createClass(Hoop, [{
+    key: "getRandomInt",
+    value: function getRandomInt(max) {
+      var _int = Math.floor(Math.random() * Math.floor(max));
+
+      if (_int === 0) return 1;
+      return _int;
+    }
+  }, {
+    key: "drawHoop",
+    value: function drawHoop(ctx) {
+      // console.log('DRAWING HOOP')
+      // ctx.fillStyle = "blue";
+      // ctx.fillRect(100, 100, 200, 200);
+      var sprite = new Image();
+      var x = this.getRandomInt(this.dimensions.width - 125);
+      var y = 75;
+
+      sprite.onload = function () {
+        ctx.drawImage(sprite, x, y, 125, 125);
+      };
+
+      sprite.src = "https://www.pikpng.com/pngl/m/60-606890_animated-basketball-png-basketball-hoop-clipart-transparent-background.png";
+      sprite.setAttribute("style", "background-color: transparent");
+    }
+  }, {
+    key: "animate",
+    value: function animate(ctx) {
+      this.drawHoop(ctx);
+    }
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(ball) {
+      // this function returns true if the the rectangles overlap
+      // console.log("this.collidesWith");
+      var _overlap = function _overlap(platform, object) {
+        //   console.log("_overlap");
+        //check that they don't overlap in the x axis
+        var objLeftOnPlat = object.left <= platform.right && object.left >= platform.left;
+        var objRightOnPlat = object.right <= platform.right && object.right >= platform.left; //   console.log(object);
+        //   console.log(platform);
+
+        if (!objLeftOnPlat && !objRightOnPlat) {
+          return false; // if (object.bottom < platform.top) return true;
+          // return false;
+        } //check that they don't overlap in the y axis
+
+
+        var objTopAbovePlatBot = object.top > platform.bottom;
+        var objBotOnPlatTop = object.bottom === platform.top;
+
+        if (!objBotOnPlatTop) {
+          return false;
+        }
+
+        return true;
+      };
+
+      var collision = false;
+      this.eachPlatform(function (platform) {
+        //check if the bird is overlapping (colliding) with either platform
+        if (_overlap(platform, ball)) {
+          collision = true; // console.log(platform);
+          // console.log(collision);
+        } // _overlap(platform.bottomPlatform, ball)
+
+      }); // console.log("collision:");
+      // console.log(collision);
+
+      return collision;
+    }
+  }]);
+
+  return Hoop;
+}();
+
+
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -518,13 +627,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   ctx.clearRect(0, 0, dimensions.width, dimensions.height); // canvasEl.height = Game.DIM_Y;
 
-  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, dimensions); // const ctx = canvasEle.getContext("2d");
-  // new GameView(game, ctx).start();
-  // console.log(canvasEle)
-  // console.log(
-  // 'webapck is working'
-  // )
-  // window.MovingObject = MovingObject;
+  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, dimensions);
 });
 
 /***/ }),
@@ -659,7 +762,8 @@ var Level = /*#__PURE__*/function () {
 
       this.drawBackground(ctx); // console.log("drawPlatforms");
 
-      this.drawPlatforms(ctx); // setInterval(() => this.drawHoop(ctx), 10000)
+      this.drawPlatforms(ctx); // this.drawHoop(ctx)
+      // setInterval(() => setTimeout(this.drawHoop(ctx), 100), 10000)
       // console.log("movePlatform");
 
       this.movePlatform();
@@ -725,7 +829,20 @@ var Level = /*#__PURE__*/function () {
       // console.log(this.platforms)
       // console.log(this.platforms)
 
-    }
+    } // drawHoop(ctx) {
+    //     // console.log('DRAWING HOOP')
+    //     // ctx.fillStyle = "blue";
+    //     // ctx.fillRect(100, 100, 200, 200);
+    //     const sprite = new Image();
+    //     const x = this.getRandomInt(this.dimensions.width - 125);
+    //     const y = 75;
+    //     sprite.onload = function() {
+    //       ctx.drawImage(sprite, x, y, 125, 125)
+    //     }
+    //     sprite.src = "https://www.pikpng.com/pngl/m/60-606890_animated-basketball-png-basketball-hoop-clipart-transparent-background.png";
+    //     sprite.setAttribute("style", "background-color: transparent")
+    // }
+
   }, {
     key: "drawPlatforms",
     value: function drawPlatforms(ctx) {
@@ -777,10 +894,9 @@ var Level = /*#__PURE__*/function () {
 
         if (objLeftOnPlat || objRightOnPlat) {
           // debugger
-          console.log('PLATFORM:::::', platform.top);
-          console.log('PLAYER:::::::', object.bottom);
-          console.log('objBotOnPlat:::::::::', objBotOnPlatTop);
-
+          // console.log('PLATFORM:::::', platform.top)
+          // console.log('PLAYER:::::::', object.bottom)
+          // console.log('objBotOnPlat:::::::::', objBotOnPlatTop)
           if (objBotOnPlatTop) {
             debugger;
           }
@@ -804,11 +920,11 @@ var Level = /*#__PURE__*/function () {
       this.eachPlatform(function (platform) {
         //check if the bird is overlapping (colliding) with either platform
         if (_overlap(platform, player.bounds())) {
-          console.log('WE ARE HERE IN THE OVERLAP');
-          console.log(platform);
+          // console.log('WE ARE HERE IN THE OVERLAP')
+          // console.log(platform)
           collision = true; // debugger
+          // console.log(player)
 
-          console.log(player);
           player.y = platform.top; // console.log('PLATFORM: ', platform)
           // console.log(collision)
           // player.movePlayer("up")
@@ -1043,22 +1159,27 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       var _this2 = this;
 
       var dir = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-      console.log('moving player');
 
+      // console.log('moving player')
       if (dir === "right") {
-        this.x += 25;
+        console.log('before right', this.x);
+        this.x = (this.x += 25) % this.dimensions.width;
+        console.log('after right', this.x);
       } else if (dir === "left") {
-        this.x -= 25;
+        console.log('before left', this.x);
+        this.x = (this.x -= 25) % this.dimensions.width;
+        console.log('after left', this.x);
       } else if (dir === "up") {
+        console.log('up');
         this.jump();
         this.y += this.vel; // console.log(this.y)
 
         var max_height = 200; // if (this.y <= max_height) this.y = max_height;
-
-        console.log('THIS.Y ======', this.y); // this.y = max_height;
+        // console.log('THIS.Y ======', this.y)
+        // this.y = max_height;
 
         setInterval(function () {
-          console.log(_this2.y);
+          // console.log(this.y)
           _this2.y += _this2.vel;
 
           if (_this2.y <= max_height) {
@@ -1090,9 +1211,8 @@ var Player = /*#__PURE__*/function (_MovingObject) {
         } else {
           this.vel = CONSTANTS.TERMINAL_VEL * -1;
         }
-      }
+      } // console.log('done moving.')
 
-      console.log('done moving.');
     }
   }, {
     key: "animate",
@@ -1106,19 +1226,20 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       // );
       this.movePlayer();
       this.drawPlayer(ctx);
-    }
+    } //
+
   }, {
     key: "drawPlayer",
     value: function drawPlayer(ctx) {
       var _this3 = this;
 
-      console.log('drawning player...'); // const kobe = new Image();
+      // console.log('drawning player...')
+      // const kobe = new Image();
       // kobe.onload = function() {
       //   ctx.drawImage(kobe, this.y, this.x, 100, 100)
       // }
       // kobe.src =
       //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
-
       ctx.fillStyle = "yellow";
       ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT); // console.log("begin to clear...");
       // ctx.clearRect(
@@ -1130,7 +1251,7 @@ var Player = /*#__PURE__*/function (_MovingObject) {
       // console.log("ending clear");
 
       var _draw = function _draw() {
-        console.log('start draw function...');
+        // console.log('start draw function...')
         var sprite = new Image(); // Define the size of a frame
 
         var frameWidth = 55;
@@ -1162,13 +1283,11 @@ var Player = /*#__PURE__*/function (_MovingObject) {
         // console.log("SPRITEEEEEEEEEE SOURCEEEEE");
         // console.log(sprite.src);
         // sprite.setAttribute("style", "background-color: transparent")
-
-        console.log('done with draw function.');
+        // console.log('done with draw function.')
       };
 
-      _draw();
+      _draw(); // console.log('done drawing.')
 
-      console.log('done drawing.');
     }
   }, {
     key: "bounds",

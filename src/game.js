@@ -1,6 +1,7 @@
 import Player from "./player";
 import Level from "./level";
 import Ball from "./ball";
+import Hoop from "./hoop";
 
 export default class DoodleJump {
   constructor(ctx, dimensions) {
@@ -203,6 +204,10 @@ export default class DoodleJump {
       // console.log('if running...requestAnimationFrame')
       //This calls this function again, after around 1/60th of a second
       // requestAnimationFrame(this.animate.bind(this));
+      setInterval(() => {
+        const hoop = new Hoop(this.dimensions);
+        hoop.animate(this.ctx);
+      }, 10000);
       start(render)
     }
   }

@@ -36,22 +36,27 @@ class Player extends MovingObject {
   }
   
   movePlayer(dir="") {
-    console.log('moving player')
+    // console.log('moving player')
 
     if (dir === "right") {
-      this.x += 25
+      console.log('before right', this.x)
+      this.x = (this.x += 25) % this.dimensions.width;
+      console.log('after right', this.x)
     } else if (dir === "left") {
-      this.x -= 25
+      console.log('before left', this.x)
+      this.x = (this.x -= 25) % this.dimensions.width;
+      console.log('after left', this.x)
     } else if (dir === "up") {
+      console.log('up')
       this.jump()
       this.y += this.vel;
       // console.log(this.y)
       const max_height = 200;
       // if (this.y <= max_height) this.y = max_height;
-      console.log('THIS.Y ======', this.y)
+      // console.log('THIS.Y ======', this.y)
       // this.y = max_height;
       setInterval(() => {
-        console.log(this.y)
+        // console.log(this.y)
         this.y += this.vel
         
         if (this.y <= max_height) {
@@ -86,7 +91,7 @@ class Player extends MovingObject {
       }
     }
 
-    console.log('done moving.')
+    // console.log('done moving.')
   }
 
   animate(ctx) {
@@ -100,9 +105,9 @@ class Player extends MovingObject {
     this.movePlayer();
     this.drawPlayer(ctx);
   }
-
+//
   drawPlayer(ctx) {
-    console.log('drawning player...')
+    // console.log('drawning player...')
     // const kobe = new Image();
     
     // kobe.onload = function() {
@@ -124,7 +129,7 @@ class Player extends MovingObject {
         // console.log("ending clear");
 
     const _draw = () => {
-      console.log('start draw function...')
+      // console.log('start draw function...')
       const sprite = new Image();
       
       // Define the size of a frame
@@ -167,11 +172,11 @@ class Player extends MovingObject {
       // console.log("SPRITEEEEEEEEEE SOURCEEEEE");
       // console.log(sprite.src);
       // sprite.setAttribute("style", "background-color: transparent")
-      console.log('done with draw function.')
+      // console.log('done with draw function.')
     }
 
     _draw()
-      console.log('done drawing.')
+      // console.log('done drawing.')
   }
 
   bounds() {

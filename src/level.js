@@ -133,7 +133,8 @@ export default class Level {
     this.drawBackground(ctx);
     // console.log("drawPlatforms");
     this.drawPlatforms(ctx);
-    // setInterval(() => this.drawHoop(ctx), 10000)
+    // this.drawHoop(ctx)
+    // setInterval(() => setTimeout(this.drawHoop(ctx), 100), 10000)
     // console.log("movePlatform");
     this.movePlatform();
   }
@@ -204,6 +205,23 @@ export default class Level {
     // console.log(this.platforms)
   }
 
+  // drawHoop(ctx) {
+  //     // console.log('DRAWING HOOP')
+  //     // ctx.fillStyle = "blue";
+  //     // ctx.fillRect(100, 100, 200, 200);
+  //     const sprite = new Image();
+
+  //     const x = this.getRandomInt(this.dimensions.width - 125);
+  //     const y = 75;
+
+  //     sprite.onload = function() {
+  //       ctx.drawImage(sprite, x, y, 125, 125)
+  //     }
+
+  //     sprite.src = "https://www.pikpng.com/pngl/m/60-606890_animated-basketball-png-basketball-hoop-clipart-transparent-background.png";
+  //     sprite.setAttribute("style", "background-color: transparent")
+  // }
+
   drawPlatforms(ctx) {
     // console.log('this.drawPlatforms');
     this.eachPlatform(function (platform) {
@@ -258,9 +276,9 @@ export default class Level {
       
       if (objLeftOnPlat || objRightOnPlat) {
         // debugger
-        console.log('PLATFORM:::::', platform.top)
-        console.log('PLAYER:::::::', object.bottom)
-        console.log('objBotOnPlat:::::::::', objBotOnPlatTop)
+        // console.log('PLATFORM:::::', platform.top)
+        // console.log('PLAYER:::::::', object.bottom)
+        // console.log('objBotOnPlat:::::::::', objBotOnPlatTop)
 
         if (objBotOnPlatTop) {
           debugger
@@ -283,11 +301,11 @@ export default class Level {
     this.eachPlatform(platform => {
         //check if the bird is overlapping (colliding) with either platform
       if (_overlap(platform, player.bounds())) {
-        console.log('WE ARE HERE IN THE OVERLAP')
-        console.log(platform)
+        // console.log('WE ARE HERE IN THE OVERLAP')
+        // console.log(platform)
         collision = true;
         // debugger
-        console.log(player)
+        // console.log(player)
         player.y = platform.top;
         // console.log('PLATFORM: ', platform)
         // console.log(collision)
