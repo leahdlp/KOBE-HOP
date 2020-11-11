@@ -107,7 +107,7 @@ class Player extends MovingObject {
   }
 //
   drawPlayer(ctx) {
-    // console.log('drawning player...')
+    console.log('drawning player...')
     // const kobe = new Image();
     
     // kobe.onload = function() {

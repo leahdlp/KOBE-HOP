@@ -1233,13 +1233,13 @@ var Player = /*#__PURE__*/function (_MovingObject) {
     value: function drawPlayer(ctx) {
       var _this3 = this;
 
-      // console.log('drawning player...')
-      // const kobe = new Image();
+      console.log('drawning player...'); // const kobe = new Image();
       // kobe.onload = function() {
       //   ctx.drawImage(kobe, this.y, this.x, 100, 100)
       // }
       // kobe.src =
       //   "https://banner2.cleanpng.com/20180328/ghw/kisspng-kobe-bryant-basketball-slam-dunk-clip-art-nba-5abc013fb852c9.818527801522270527755.jpg";
+
       ctx.fillStyle = "yellow";
       ctx.fillRect(this.x, this.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT); // console.log("begin to clear...");
       // ctx.clearRect(
