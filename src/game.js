@@ -10,8 +10,8 @@ export default class DoodleJump {
     this.ctx = ctx;
     // this.backgrnd = canvas2.getContext("2d");
     this.dimensions = dimensions;
-    console.log((2/3) * canvas.width)
-    // console.log((4/5) * canvas.height)
+    // console.log((2/3) * canvas.width)
+    console.log((4/5) * canvas.height)
 
     this.balls;
     // this.balls = this.player.balls;
